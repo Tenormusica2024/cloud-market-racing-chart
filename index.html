@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Market Share Racing Chart</title>
+    <meta name="description" content="Interactive racing bar chart showing cloud service market share evolution from 2019-2025">
+    <meta name="keywords" content="cloud, AWS, Azure, Google Cloud, market share, data visualization">
+    <meta name="author" content="Your Name">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Cloud Market Share Racing Chart">
+    <meta property="og:description" content="Watch the cloud market evolution in real-time">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/cloud-market-racing-chart">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="title">✨ Cloud Market Analytics ✨</div>
+            <div class="subtitle">Market Share Evolution • 2019-2025</div>
+        </div>
+        
+        <div class="chart-wrapper">
+            <div class="date-display" id="dateDisplay">2019年1月</div>
+            
+            <div class="chart-container">
+                <div class="grid-lines" id="gridLines"></div>
+                <div class="bars-container" id="barsContainer"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="startAnimation()">▶ Play</button>
+            <button class="btn" onclick="pauseAnimation()">⏸ Pause</button>
+            <button class="btn" onclick="resetAnimation()">↻ Reset</button>
+        </div>
+        
+        <div class="speed-control">
+            <label>Animation Speed:</label>
+            <input type="range" class="speed-slider" min="200" max="1500" value="600" id="speedSlider">
+            <span id="speedDisplay">0.6s</span>
+        </div>
+        
+        <div class="ranking-panel">
+            <div class="ranking-title">🏆 Current Rankings (April 2025)</div>
+            <div class="ranking-grid" id="rankingGrid"></div>
+        </div>
+        
+        <div class="info-section">
+            <h3>データについて</h3>
+            <p>このチャートは、2019年1月から2025年4月までのクラウドサービス市場シェアの推移を表示します。データは業界レポート（Gartner、Canalys等）を基にした推定値です。</p>
+            <ul>
+                <li><strong>AWS:</strong> Amazon Web Services</li>
+                <li><strong>Azure:</strong> Microsoft Azure</li>
+                <li><strong>Google:</strong> Google Cloud Platform</li>
+                <li><strong>Alibaba:</strong> Alibaba Cloud</li>
+                <li><strong>IBM:</strong> IBM Cloud</li>
+                <li><strong>Oracle:</strong> Oracle Cloud</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="js/data.js"></script>
+    <script src="js/chart.js"></script>
+</body>
+</html>
