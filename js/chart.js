@@ -261,16 +261,3 @@ function getMarketShareChange(company, fromIndex, toIndex) {
 window.startAnimation = startAnimation;
 window.pauseAnimation = pauseAnimation;
 window.resetAnimation = resetAnimation;
-
-// Development helper functions (remove in production)
-if (process?.env?.NODE_ENV === 'development') {
-    window.debugChart = {
-        data: cloudMarketData,
-        insights: marketInsights,
-        currentIndex: () => currentIndex,
-        jumpTo: (index) => {
-            currentIndex = Math.max(0, Math.min(index, cloudMarketData.length - 1));
-            updateChart(currentIndex);
-        }
-    };
-}
