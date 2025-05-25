@@ -596,7 +596,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="title">GAFAMN Market Capitalization</div>
+            <div class="title">GAFAMN Market Capitalization (240FPS)</div>
             <div class="subtitle">Tech Giants Evolution • 2019-2025</div>
         </div>
         
@@ -663,7 +663,7 @@
             5: { Google: 2.36, Apple: 3.30, Meta: 1.47, Amazon: 2.20, NVIDIA: 3.30, Microsoft: 3.40 }
         };
 
-        // Generate monthly dataset for ultra-smooth 160FPS animation
+        // Generate monthly dataset for ultra-smooth 240FPS animation
         function generateGAMAFNData() {
             const data = [];
             
@@ -716,7 +716,7 @@
 
         const gamafnMarketData = generateGAMAFNData();
 
-        // Chart state for 160FPS animation - 最高品質の滑らかさ
+        // Chart state for 240FPS animation - 究極の滑らかさ
         let currentIndex = 0;
         let nextIndex = 1;
         let animationTimer = null;
@@ -724,8 +724,8 @@
         let animationSpeed = 1500;
         let isPlaying = false;
         let frameProgress = 0;
-        const FRAME_RATE = 160; // 160 FPS for ultimate smoothness
-        const FRAME_INTERVAL = 1000 / FRAME_RATE; // ~6.25ms intervals
+        const FRAME_RATE = 240; // 240 FPS for ultimate smoothness
+        const FRAME_INTERVAL = 1000 / FRAME_RATE; // ~4.17ms intervals
         
         // Cache for smooth DOM updates - 軽量化強化
         let barElements = [];
@@ -787,12 +787,12 @@
             return interpolated;
         }
 
-        // Ultra-smooth easing function for 160FPS animation
+        // Ultra-smooth easing function for 240FPS animation  
         function easeInOutCubic(t) {
             return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
 
-        // Update chart with 160FPS ultra-smooth animation
+        // Update chart with 240FPS ultra-smooth animation
         function updateChart(data) {
             try {
                 if (!data) return;
@@ -868,8 +868,8 @@
                     });
                 }
                 
-                // Update ranking panel (軽量化：更新頻度を1/5に削減)
-                if (rankingGrid && frameProgress < 0.02 && rankingUpdateCounter % 5 === 0) {
+                // Update ranking panel (軽量化：更新頻度を1/8に削減 - 240FPS対応)
+                if (rankingGrid && frameProgress < 0.02 && rankingUpdateCounter % 8 === 0) {
                     rankingGrid.innerHTML = '';
                     sortedData.forEach((item, i) => {
                         const rankItem = document.createElement('div');
@@ -889,7 +889,7 @@
             }
         }
 
-        // 160FPS Frame-based animation loop - 究極の滑らかさ
+        // 240FPS Frame-based animation loop - 究極の滑らかさ
         function animateFrame() {
             if (!isPlaying) return;
             
@@ -906,7 +906,7 @@
             
             updateSeekPosition();
             
-            // Ultra-precise frame progression for 160FPS
+            // Ultra-precise frame progression for 240FPS
             frameProgress += FRAME_INTERVAL / animationSpeed;
             
             if (frameProgress >= 1) {
