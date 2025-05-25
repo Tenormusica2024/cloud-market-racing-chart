@@ -3,14 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAFAMN Market Cap Racing Chart</title>
-    <meta name="description" content="Interactive racing bar chart showing GAFAMN market capitalization evolution from 2019-2025">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>Portfolio - Akinori Koda</title>
     <style>
-        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -18,1034 +12,616 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0c0c0f 0%, #1a1a2e 30%, #16213e 70%, #0f172a 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #e2e8f0;
-            overflow-x: hidden;
-            line-height: 1.6;
-            position: relative;
-        }
-
-        /* Subtle animated background overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                ellipse at 20% 80%,
-                rgba(0, 212, 255, 0.08) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                ellipse at 80% 20%,
-                rgba(183, 148, 246, 0.06) 0%,
-                transparent 50%
-            );
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .title {
-            font-size: clamp(2.2rem, 4vw, 3.5rem);
-            font-weight: 800;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
             color: #ffffff;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            letter-spacing: -0.025em;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
-            background-clip: text;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #64ffda, #bb86fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            font-size: clamp(0.95rem, 2vw, 1.1rem);
-            font-weight: 400;
-            color: #94a3b8;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+        .header p {
+            color: #cccccc;
+            font-size: 1.1rem;
         }
 
-        /* Chart Wrapper */
-        .chart-wrapper {
-            background: linear-gradient(135deg, 
-                rgba(15, 23, 42, 0.95) 0%, 
-                rgba(30, 41, 59, 0.9) 50%, 
-                rgba(15, 23, 42, 0.95) 100%
-            );
-            backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(0, 212, 255, 0.4) 20%, 
-                rgba(183, 148, 246, 0.4) 80%, 
-                transparent
-            );
-        }
-
-        /* Date Display - Fixed width for stable positioning */
-        .date-display {
-            font-size: clamp(1.4rem, 3vw, 1.8rem);
-            font-weight: 600;
+        .nav {
+            padding: 1rem 2rem;
             text-align: center;
-            margin-bottom: 35px;
-            color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            letter-spacing: 0.05em;
-            min-height: 2.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(183, 148, 246, 0.1));
-            border-radius: 12px;
-            padding: 12px 24px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
         }
 
-        /* Chart Container */
-        .chart-container {
-            position: relative;
-            height: 460px;
-            margin: 25px 0;
-        }
-
-        /* Grid Lines */
-        .grid-lines {
-            position: absolute;
-            top: 60px;
-            left: 120px;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .grid-line {
-            position: absolute;
-            width: 1px;
-            height: calc(100% - 60px);
-            background: linear-gradient(180deg, 
-                rgba(148, 163, 184, 0.08), 
-                rgba(148, 163, 184, 0.15), 
-                rgba(148, 163, 184, 0.08)
-            );
-        }
-
-        .grid-label {
-            position: absolute;
-            top: -50px;
-            left: -40px;
-            font-size: 0.75rem;
+        .nav a {
+            color: #64ffda;
+            text-decoration: none;
+            margin: 0 1rem;
             font-weight: 500;
-            color: #64748b;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
-            padding: 4px 10px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            white-space: nowrap;
+            transition: color 0.3s ease;
         }
 
-        /* Bars Container */
-        .bars-container {
-            position: relative;
-            height: 100%;
-            z-index: 2;
-            margin-top: 60px;
+        .nav a:hover {
+            color: #bb86fc;
         }
 
-        .bar-row {
-            position: absolute;
-            width: 100%;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            /* Ultra smooth transitions for 160FPS animation */
-            transition: top 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
         }
 
-        .company-label {
-            width: 100px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            text-align: right;
-            padding-right: 15px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
+        .section {
+            margin-bottom: 4rem;
         }
 
-        .bar {
-            height: 38px;
-            border-radius: 19px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 18px;
-            box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.15),
-                0 2px 4px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-width: 60px;
-            position: relative;
-            overflow: hidden;
-            /* No CSS transition - handled by 160FPS JavaScript animation */
+        .section-title {
+            font-size: 2rem;
+            color: #64ffda;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+            padding-bottom: 0.5rem;
         }
 
-        .bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                transparent 50%, 
-                rgba(255, 255, 255, 0.05) 100%
-            );
-            pointer-events: none;
-        }
-
-        .percentage {
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.95);
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-            background: rgba(0, 0, 0, 0.25);
-            padding: 6px 12px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-            /* Fixed positioning for stable display */
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            min-width: 100px; /* Wider for market cap values */
-            text-align: center;
-            display: inline-block;
-        }
-
-        /* Controls */
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 25px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, 
-                rgba(30, 41, 59, 0.8) 0%, 
-                rgba(15, 23, 42, 0.9) 100%
-            );
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            color: #e2e8f0;
-            padding: 12px 24px;
-            border-radius: 24px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            font-family: inherit;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(0, 212, 255, 0.3), 
-                transparent
-            );
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            background: linear-gradient(135deg, 
-                rgba(0, 212, 255, 0.1) 0%, 
-                rgba(30, 41, 59, 0.9) 100%
-            );
-            border-color: rgba(0, 212, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        /* Speed Control & Seek Control */
-        .speed-control, .seek-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, 
-                rgba(30, 41, 59, 0.6) 0%, 
-                rgba(15, 23, 42, 0.8) 100%
-            );
-            backdrop-filter: blur(12px);
-            padding: 18px 30px;
+        .about-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.2);
             border-radius: 20px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .speed-control label, .seek-control label {
-            font-weight: 600;
-            color: #cbd5e1;
-            min-width: 70px;
-            font-size: 0.9rem;
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cccccc;
         }
 
-        .speed-slider, .seek-slider {
-            width: 220px;
-            height: 6px;
-            border-radius: 3px;
-            background: linear-gradient(135deg, 
-                rgba(148, 163, 184, 0.2), 
-                rgba(148, 163, 184, 0.1)
-            );
-            outline: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .speed-slider::-webkit-slider-thumb, .seek-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00d4ff 0%, #0ea5e9 100%);
-            cursor: pointer;
-            box-shadow: 
-                0 4px 12px rgba(0, 212, 255, 0.4),
-                0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .speed-slider::-webkit-slider-thumb:hover, .seek-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
-            box-shadow: 
-                0 6px 16px rgba(0, 212, 255, 0.5),
-                0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .seek-slider::-webkit-slider-thumb {
-            background: linear-gradient(135deg, #b794f6 0%, #8b5cf6 100%);
-            box-shadow: 
-                0 4px 12px rgba(183, 148, 246, 0.4),
-                0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .seek-slider::-webkit-slider-thumb:hover {
-            box-shadow: 
-                0 6px 16px rgba(183, 148, 246, 0.5),
-                0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        #speedDisplay, #timelineDisplay {
-            font-weight: 700;
-            min-width: 90px;
-            text-align: center;
-            font-size: 0.9rem;
-            /* Fixed positioning for stable display */
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            display: inline-block;
-        }
-
-        #speedDisplay {
-            color: #00d4ff;
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-            min-width: 80px;
-        }
-
-        #timelineDisplay {
-            color: #b794f6;
-            text-shadow: 0 0 8px rgba(183, 148, 246, 0.3);
-            font-size: 0.85rem;
-            min-width: 120px;
-            text-align: center;
-        }
-
-        /* Ranking Panel */
-        .ranking-panel {
-            background: linear-gradient(135deg, 
-                rgba(15, 23, 42, 0.95) 0%, 
-                rgba(30, 41, 59, 0.9) 50%, 
-                rgba(15, 23, 42, 0.95) 100%
-            );
-            backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3);
-        }
-
-        .ranking-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 25px;
-            color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .ranking-grid {
+        .skills-comprehensive {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
 
-        .rank-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 18px;
-            background: linear-gradient(135deg, 
-                rgba(30, 41, 59, 0.6) 0%, 
-                rgba(15, 23, 42, 0.8) 100%
-            );
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
+        .skill-group {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(187, 134, 252, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
             transition: all 0.3s ease;
         }
 
-        .rank-item:hover {
-            background: linear-gradient(135deg, 
-                rgba(0, 212, 255, 0.1) 0%, 
-                rgba(30, 41, 59, 0.8) 100%
-            );
-            border-color: rgba(0, 212, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .skill-group:hover {
+            transform: translateY(-3px);
+            border-color: rgba(187, 134, 252, 0.5);
+            box-shadow: 0 10px 25px rgba(187, 134, 252, 0.2);
         }
 
-        .rank-number {
-            font-weight: 800;
-            font-size: 1rem;
-            color: #00d4ff;
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-            width: 24px;
-        }
-
-        .rank-company {
+        .skill-group h3 {
+            color: #bb86fc;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
             font-weight: 600;
-            flex: 1;
-            color: #e2e8f0;
         }
 
-        .rank-value {
-            font-weight: 700;
-            color: #b794f6;
-            text-shadow: 0 0 8px rgba(183, 148, 246, 0.3);
-            /* Fixed positioning for ranking panel */
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            min-width: 80px;
-            text-align: right;
-            display: inline-block;
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
-        /* Responsive Design */
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-name {
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .skill-level {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(45deg, #64ffda, #bb86fc);
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .experience-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #64ffda, #bb86fc);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 3px solid #64ffda;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background: #64ffda;
+            border-radius: 50%;
+            border: 3px solid #0f0f0f;
+        }
+
+        .timeline-date {
+            color: #64ffda;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: #bb86fc;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-description {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .achievement-card {
+            background: linear-gradient(145deg, rgba(100, 255, 218, 0.1), rgba(187, 134, 252, 0.1));
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            color: #64ffda;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-description {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 25px 15px;
+            .header h1 {
+                font-size: 2rem;
             }
-
-            .chart-wrapper {
-                padding: 25px 20px;
+            .about-section {
+                padding: 2rem;
             }
-
-            .chart-container {
-                height: 400px;
-            }
-
-            .grid-lines {
-                left: 80px;
-                top: 50px;
-            }
-
-            .bars-container {
-                margin-top: 50px;
-            }
-
-            .company-label {
-                width: 70px;
-                font-size: 0.8rem;
-                padding-right: 8px;
-            }
-
-            .bar {
-                height: 34px;
-            }
-
-            .bar-row {
-                height: 45px;
-            }
-
-            .controls {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.8rem;
-            }
-
-            .speed-control, .seek-control {
-                flex-direction: column;
-                gap: 12px;
-                padding: 15px 20px;
-            }
-
-            .speed-slider, .seek-slider {
-                width: 180px;
-            }
-
-            .ranking-grid {
+            .skills-comprehensive {
                 grid-template-columns: 1fr;
             }
-        }
-
-        @media (max-width: 480px) {
-            .chart-container {
-                height: 350px;
-            }
-
-            .company-label {
-                width: 60px;
-                font-size: 0.75rem;
-            }
-
-            .bar {
-                height: 30px;
-            }
-
-            .bar-row {
-                height: 42px;
-            }
-
-            .percentage {
-                font-size: 0.8rem;
-                padding: 4px 10px;
-                min-width: 90px;
+            .achievements {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>Portfolio</h1>
+        <p>LLM駆動開発エンジニアとしてのキャリアと実績</p>
+    </div>
+
+    <div class="nav">
+        <a href="index.html">← ホームに戻る</a>
+        <a href="projects.html">プロジェクト</a>
+        <a href="mailto:dragonrondo@gmail.com">お問い合わせ</a>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <div class="title">GAFAMN Market Capitalization (240FPS)</div>
-            <div class="subtitle">Tech Giants Evolution • 2019-2025</div>
-        </div>
-        
-        <div class="chart-wrapper">
-            <div class="date-display" id="dateDisplay">2019年01月</div>
-            
-            <div class="chart-container">
-                <div class="grid-lines" id="gridLines"></div>
-                <div class="bars-container" id="barsContainer"></div>
+        <div class="section">
+            <div class="about-section">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <p>
+                        LLM（大規模言語モデル）を活用したソフトウェア開発と業務自動化を専門とするAIエンジニアです。
+                        Claude、ChatGPT、GitHub Copilot等の最新AIツールを駆使し、
+                        従来の開発プロセスを大幅に効率化する手法を実践しています。
+                    </p>
+                    <br>
+                    <p>
+                        データサイエンス分野では、SageMaker、Snowflakeの実装経験を活かし、
+                        効率的なデータ分析パイプライン構築を行っています。
+                        また、Webスクレイピングやデイリータスクの自動化により、手作業を大幅に削減するソリューションを提供。
+                        最新式のVibe Codingアプローチによる直感的なプログラム開発手法の研究にも取り組んでいます。
+                        AI絵作成（Stable Diffusion）での創作活動も行っており、技術と芸術の融合を追求しています。
+                    </p>
+                </div>
             </div>
         </div>
-        
-        <div class="controls">
-            <button class="btn" onclick="startAnimation()">▶ Play</button>
-            <button class="btn" onclick="pauseAnimation()">⏸ Pause</button>
-            <button class="btn" onclick="resetAnimation()">↻ Reset</button>
+
+        <div class="section">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-comprehensive">
+                <div class="skill-group">
+                    <h3>🤖 LLM駆動開発</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Claude API</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">GitHub Copilot</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Cursor IDE</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Claude Code</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>🐍 プログラミング・開発</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">SQL</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Linux/WSL</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Git/GitHub</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>📊 データサイエンス・ML</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">SageMaker</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Snowflake</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Pandas/NumPy</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">scikit-learn</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>🔧 自動化・Webスクレイピング</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">BeautifulSoup</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Selenium</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">GitHub Actions</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">RPA/VBA</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>☁️ クラウド・インフラ</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">AWS (S3, Lambda, EC2)</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Docker</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">PostgreSQL/MySQL</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">GitHub Pages</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>🎨 創作・開発手法</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Vibe Coding</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Stable Diffusion</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">AI音楽制作</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 35%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">クリエイティブコーディング</span>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="speed-control">
-            <label>Speed:</label>
-            <input type="range" class="speed-slider" min="200" max="3000" value="1500" id="speedSlider">
-            <span id="speedDisplay">1.50s</span>
+
+        <div class="section">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2023 - Present</div>
+                    <div class="timeline-title">AI Engineer & Automation Specialist</div>
+                    <div class="timeline-company">Independent Consultant</div>
+                    <div class="timeline-description">
+                        LLM駆動開発手法の実践・研究および業務自動化コンサルティングに従事。
+                        Claude、ChatGPT、GitHub Copilotを活用した効率的な開発フローの確立。
+                        SageMaker、Snowflakeを活用したデータ分析パイプライン構築、
+                        Webスクレイピングによる情報収集自動化システムの開発を手がける。
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2021 - 2023</div>
+                    <div class="timeline-title">Data Analysis Engineer</div>
+                    <div class="timeline-company">Technology Solutions Provider</div>
+                    <div class="timeline-description">
+                        データ分析基盤の設計・実装を担当。Pythonを中心とした分析パイプライン構築、
+                        機械学習モデルの開発・運用、自動化スクリプトによる業務効率化を実施。
+                        デイリータスクの自動化により手作業を大幅に削減し、生産性向上に貢献。
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2019 - 2021</div>
+                    <div class="timeline-title">Junior Data Scientist</div>
+                    <div class="timeline-company">Data Analytics Consulting</div>
+                    <div class="timeline-description">
+                        データサイエンスの基礎技術習得およびプロジェクト実装経験を積む。
+                        Python、SQL、統計解析手法の習得、機械学習モデルの実装、
+                        データ可視化によるレポート作成、クライアント向け分析ソリューションの提供。
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="seek-control">
-            <label>Timeline:</label>
-            <input type="range" class="seek-slider" min="0" max="100" value="0" id="seekSlider">
-            <span id="timelineDisplay">2019年01月</span>
+
+        <div class="section">
+            <h2 class="section-title">Key Achievements</h2>
+            <div class="achievements">
+                <div class="achievement-card">
+                    <div class="achievement-icon">🚀</div>
+                    <div class="achievement-title">LLM駆動開発効率化</div>
+                    <div class="achievement-description">
+                        AI支援開発により開発速度200%向上を実現
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">📰</div>
+                    <div class="achievement-title">AI News Daily構築</div>
+                    <div class="achievement-description">
+                        完全自動化されたニュース収集・公開システム
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">📊</div>
+                    <div class="achievement-title">データ分析基盤構築</div>
+                    <div class="achievement-description">
+                        SageMaker・Snowflake活用の実装経験
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🔄</div>
+                    <div class="achievement-title">業務自動化実装</div>
+                    <div class="achievement-description">
+                        デイリータスクの90%以上を自動化達成
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🕷️</div>
+                    <div class="achievement-title">Webスクレイピング専門性</div>
+                    <div class="achievement-description">
+                        複雑な動的サイトからの情報収集システム構築
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🎨</div>
+                    <div class="achievement-title">AI Art作品制作</div>
+                    <div class="achievement-description">
+                        Stable Diffusionによるアート作品をInstagramで発表
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">🚀</div>
+                    <div class="achievement-title">Vibe Coding手法確立</div>
+                    <div class="achievement-description">
+                        直感的プログラム開発手法の研究・実践
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="ranking-panel">
-            <div class="ranking-title">💰 Current Market Cap Rankings (May 2025)</div>
-            <div class="ranking-grid" id="rankingGrid"></div>
+
+        <div class="section">
+            <h2 class="section-title">AI Philosophy & Vision</h2>
+            <div class="about-section">
+                <div class="about-content">
+                    <p>
+                        <strong>「AIは仕事を奪うのではなく、一人ができる仕事を10倍以上にする」</strong><br>
+                        これが私の根本的な指針です。AI技術の真の価値は人間の能力を代替することではなく、
+                        個人の生産性と創造性を飛躍的に向上させることにあると考えています。
+                    </p>
+                    <br>
+                    <p>
+                        一人のエンジニアがAIツールを適切に活用することで、従来なら10人のチームが必要だった
+                        プロジェクトを単独で実現できる時代が到来しています。私はこの変革の最前線で、
+                        LLM駆動開発、自動化技術、データ分析の専門知識を駆使し、
+                        「個人の無限の可能性」を実証し続けています。
+                    </p>
+                    <br>
+                    <p>
+                        AIとの協働により、単純作業から解放された人間は、より戦略的思考、
+                        創造的問題解決、イノベーション創出に専念できるようになります。
+                        これこそが、持続可能で人間中心のテクノロジー活用の在り方だと信じています。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Development Philosophy</h2>
+            <div class="about-section">
+                <div class="about-content">
+                    <p>
+                        <strong>LLM駆動開発</strong>を中核とした効率的なソフトウェア開発アプローチを実践しています。
+                        Claude、ChatGPT、GitHub Copilot等のAIツールを適切に活用することで、
+                        従来の開発プロセスを根本的に見直し、より創造的で価値の高い作業に集中できる環境を構築します。
+                    </p>
+                    <br>
+                    <p>
+                        自動化ファーストの姿勢で、反復的なタスクを徹底的に効率化。
+                        特にWebスクレイピングやデイリータスクの自動化により、手作業を大幅に削減し、
+                        データドリブンな意思決定を支援します。<strong>Vibe Coding</strong>という最新式の
+                        直感的プログラム開発手法の研究を通じて、創造性と技術の新しい融合を模索し、
+                        多角的な視点でのソリューション開発を心がけています。
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <script>
-        // 6大テック企業（GAFAMN）の時価総額データ
-        const companyColors = {
-            'Google': 'linear-gradient(135deg, #4285f4 0%, #34a853 50%, #ea4335 100%)',
-            'Apple': 'linear-gradient(135deg, #007aff 0%, #5856d6 50%, #af52de 100%)',
-            'Meta': 'linear-gradient(135deg, #1877f2 0%, #42a5f5 50%, #0d47a1 100%)',
-            'Amazon': 'linear-gradient(135deg, #ff9900 0%, #ff6b35 50%, #f7931e 100%)',
-            'NVIDIA': 'linear-gradient(135deg, #76b900 0%, #43a047 50%, #2e7d32 100%)',
-            'Microsoft': 'linear-gradient(135deg, #00a4ef 0%, #0078d4 50%, #106ebe 100%)'
-        };
-
-        // Base yearly market cap data (in TRILLIONS USD) - 実際の検索データに基づく
-        const yearlyBenchmarks = {
-            2019: { Google: 0.90, Apple: 1.40, Meta: 0.54, Amazon: 0.92, NVIDIA: 0.11, Microsoft: 1.20 },
-            2020: { Google: 1.20, Apple: 2.40, Meta: 0.78, Amazon: 1.65, NVIDIA: 0.32, Microsoft: 1.70 },
-            2021: { Google: 1.95, Apple: 2.90, Meta: 0.93, Amazon: 1.70, NVIDIA: 0.80, Microsoft: 2.50 },
-            2022: { Google: 1.15, Apple: 2.40, Meta: 0.35, Amazon: 0.85, NVIDIA: 0.38, Microsoft: 1.80 },
-            2023: { Google: 1.75, Apple: 3.00, Meta: 0.80, Amazon: 1.55, NVIDIA: 1.80, Microsoft: 2.80 },
-            2024: { Google: 2.10, Apple: 3.30, Meta: 1.20, Amazon: 1.90, NVIDIA: 3.20, Microsoft: 3.20 }
-        };
-
-        // Latest 2025 data (May 2025 actual data from search results)
-        const latest2025Data = {
-            1: { Google: 2.30, Apple: 3.28, Meta: 1.45, Amazon: 2.15, NVIDIA: 3.25, Microsoft: 3.35 },
-            2: { Google: 2.32, Apple: 3.30, Meta: 1.46, Amazon: 2.18, NVIDIA: 3.28, Microsoft: 3.37 },
-            3: { Google: 2.35, Apple: 3.32, Meta: 1.47, Amazon: 2.20, NVIDIA: 3.30, Microsoft: 3.38 },
-            4: { Google: 2.36, Apple: 3.30, Meta: 1.47, Amazon: 2.20, NVIDIA: 3.30, Microsoft: 3.40 },
-            5: { Google: 2.36, Apple: 3.30, Meta: 1.47, Amazon: 2.20, NVIDIA: 3.30, Microsoft: 3.40 }
-        };
-
-        // Generate monthly dataset for ultra-smooth 240FPS animation
-        function generateGAMAFNData() {
-            const data = [];
-            
-            // Generate 2019-2024 monthly data
-            for (let year = 2019; year <= 2024; year++) {
-                for (let month = 1; month <= 12; month++) {
-                    const currentYearData = yearlyBenchmarks[year];
-                    const nextYearData = yearlyBenchmarks[year + 1] || currentYearData;
-                    const progress = (month - 1) / 11;
-                    
-                    const monthData = {
-                        year: year,
-                        month: month,
-                        displayDate: `${year}年${String(month).padStart(2, '0')}月`
-                    };
-                    
-                    Object.keys(currentYearData).forEach(company => {
-                        const currentValue = currentYearData[company];
-                        const nextValue = nextYearData[company];
-                        let interpolatedValue = currentValue + (nextValue - currentValue) * progress;
-                        
-                        // Special handling for NVIDIA's AI boom in 2023-2024 (実際のデータに基づく)
-                        if (company === 'NVIDIA' && year === 2023) {
-                            // Realistic AI revolution growth curve
-                            const aiBoostFactor = Math.pow(progress, 0.5) * 0.5;
-                            interpolatedValue = currentValue * (1 + aiBoostFactor);
-                        }
-                        
-                        // Add realistic market volatility (±2%)
-                        const randomVariation = (Math.random() - 0.5) * 0.04 * interpolatedValue;
-                        monthData[company] = Math.max(0.01, interpolatedValue + randomVariation);
-                    });
-                    
-                    data.push(monthData);
-                }
-            }
-            
-            // Add 2025 data (January - May)
-            Object.entries(latest2025Data).forEach(([month, monthData]) => {
-                data.push({
-                    year: 2025,
-                    month: parseInt(month),
-                    displayDate: `2025年${String(month).padStart(2, '0')}月`,
-                    ...monthData
-                });
-            });
-            
-            return data;
-        }
-
-        const gamafnMarketData = generateGAMAFNData();
-
-        // Chart state for 240FPS animation - 究極の滑らかさ
-        let currentIndex = 0;
-        let nextIndex = 1;
-        let animationTimer = null;
-        let frameTimer = null;
-        let animationSpeed = 1500;
-        let isPlaying = false;
-        let frameProgress = 0;
-        const FRAME_RATE = 240; // 240 FPS for ultimate smoothness
-        const FRAME_INTERVAL = 1000 / FRAME_RATE; // ~4.17ms intervals
-        
-        // Cache for smooth DOM updates - 軽量化強化
-        let barElements = [];
-        let isInitialized = false;
-        let rankingUpdateCounter = 0; // ランキング更新頻度制御
-
-        // Create vertical grid lines (0-4.0T range) - 重複しない位置に配置
-        function createGridLines() {
-            const gridContainer = document.getElementById('gridLines');
-            if (!gridContainer) return;
-            
-            gridContainer.innerHTML = '';
-            
-            // Vertical grid lines instead of horizontal
-            for (let i = 0; i <= 100; i += 20) {
-                const line = document.createElement('div');
-                line.className = 'grid-line';
-                line.style.left = `${i}%`;
-                line.style.top = '0';
-                line.style.bottom = '0';
-                line.style.width = '1px';
-                line.style.height = 'auto';
-                
-                const label = document.createElement('div');
-                label.className = 'grid-label';
-                label.textContent = `${(i / 100 * 4.0).toFixed(1)}T`;
-                label.style.top = '-50px';
-                label.style.left = '-40px';
-                line.appendChild(label);
-                
-                gridContainer.appendChild(line);
-            }
-        }
-
-        // Interpolate between two data points with ultra-smooth easing
-        function interpolateData(currentData, nextData, progress) {
-            const easedProgress = easeInOutCubic(progress);
-            
-            const interpolated = {
-                year: currentData.year,
-                month: currentData.month,
-                displayDate: currentData.displayDate
-            };
-            
-            // Stable date updates (monthly intervals)
-            if (progress >= 0.9) {
-                interpolated.displayDate = nextData.displayDate;
-            } else {
-                interpolated.displayDate = currentData.displayDate;
-            }
-            
-            const companies = ['Google', 'Apple', 'Meta', 'Amazon', 'NVIDIA', 'Microsoft'];
-            companies.forEach(company => {
-                const current = currentData[company] || 0;
-                const next = nextData[company] || 0;
-                interpolated[company] = current + (next - current) * easedProgress;
-            });
-            
-            return interpolated;
-        }
-
-        // Ultra-smooth easing function for 240FPS animation  
-        function easeInOutCubic(t) {
-            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        }
-
-        // Update chart with 240FPS ultra-smooth animation
-        function updateChart(data) {
-            try {
-                if (!data) return;
-                
-                const dateDisplay = document.getElementById('dateDisplay');
-                const barsContainer = document.getElementById('barsContainer');
-                const rankingGrid = document.getElementById('rankingGrid');
-                
-                if (dateDisplay) {
-                    dateDisplay.textContent = data.displayDate;
-                }
-                
-                const companies = ['Google', 'Apple', 'Meta', 'Amazon', 'NVIDIA', 'Microsoft'];
-                const sortedData = companies
-                    .map(company => ({ 
-                        name: company, 
-                        value: data[company] || 0
-                    }))
-                    .sort((a, b) => b.value - a.value);
-                
-                // Initialize or update bars with 160FPS smooth DOM manipulation
-                if (!isInitialized || barsContainer.children.length === 0) {
-                    barsContainer.innerHTML = '';
-                    barElements = [];
-                    
-                    sortedData.forEach((item, i) => {
-                        const barRow = document.createElement('div');
-                        barRow.className = 'bar-row';
-                        barRow.style.top = `${i * 70}px`;
-                        
-                        const companyLabel = document.createElement('div');
-                        companyLabel.className = 'company-label';
-                        companyLabel.textContent = item.name;
-                        
-                        const bar = document.createElement('div');
-                        bar.className = 'bar';
-                        bar.style.background = companyColors[item.name] || '#ccc';
-                        bar.style.width = `${Math.max(5, (item.value / 4.0) * 100)}%`;
-                        
-                        const percentage = document.createElement('span');
-                        percentage.className = 'percentage';
-                        percentage.textContent = `${item.value.toFixed(2)}T`;
-                        
-                        bar.appendChild(percentage);
-                        barRow.appendChild(companyLabel);
-                        barRow.appendChild(bar);
-                        barsContainer.appendChild(barRow);
-                        
-                        barElements.push({
-                            row: barRow,
-                            bar: bar,
-                            percentage: percentage,
-                            company: item.name
-                        });
-                    });
-                    
-                    isInitialized = true;
-                } else {
-                    // 160FPS ultra-smooth updates - direct DOM manipulation for maximum performance
-                    sortedData.forEach((item, i) => {
-                        const barElement = barElements.find(el => el.company === item.name);
-                        if (barElement) {
-                            // Ultra-smooth position updates
-                            barElement.row.style.top = `${i * 70}px`;
-                            
-                            // Frame-by-frame width updates for buttery smooth animation
-                            const newWidth = Math.max(5, (item.value / 4.0) * 100);
-                            barElement.bar.style.width = `${newWidth}%`;
-                            
-                            // Fixed position value updates (詳細な桁数表示)
-                            barElement.percentage.textContent = `${item.value.toFixed(2)}T`;
-                        }
-                    });
-                }
-                
-                // Update ranking panel (軽量化：更新頻度を1/8に削減 - 240FPS対応)
-                if (rankingGrid && frameProgress < 0.02 && rankingUpdateCounter % 8 === 0) {
-                    rankingGrid.innerHTML = '';
-                    sortedData.forEach((item, i) => {
-                        const rankItem = document.createElement('div');
-                        rankItem.className = 'rank-item';
-                        rankItem.innerHTML = `
-                            <span class="rank-number">${i + 1}</span>
-                            <span class="rank-company">${item.name}</span>
-                            <span class="rank-value">${item.value.toFixed(2)}T</span>
-                        `;
-                        rankingGrid.appendChild(rankItem);
-                    });
-                }
-                rankingUpdateCounter++;
-                
-            } catch (error) {
-                console.error('Chart update error:', error);
-            }
-        }
-
-        // 240FPS Frame-based animation loop - 究極の滑らかさ
-        function animateFrame() {
-            if (!isPlaying) return;
-            
-            const currentData = gamafnMarketData[currentIndex];
-            const nextData = gamafnMarketData[nextIndex];
-            
-            if (!currentData || !nextData) {
-                pauseAnimation();
-                return;
-            }
-            
-            const interpolatedData = interpolateData(currentData, nextData, frameProgress);
-            updateChart(interpolatedData);
-            
-            updateSeekPosition();
-            
-            // Ultra-precise frame progression for 240FPS
-            frameProgress += FRAME_INTERVAL / animationSpeed;
-            
-            if (frameProgress >= 1) {
-                frameProgress = 0;
-                currentIndex = nextIndex;
-                nextIndex++;
-                
-                if (nextIndex >= gamafnMarketData.length) {
-                    nextIndex = 0;
-                }
-                if (currentIndex >= gamafnMarketData.length) {
-                    currentIndex = 0;
-                }
-            }
-        }
-
-        // Animation controls
-        function startAnimation() {
-            if (isPlaying) return;
-            isPlaying = true;
-            frameTimer = setInterval(animateFrame, FRAME_INTERVAL);
-        }
-
-        function pauseAnimation() {
-            if (frameTimer) {
-                clearInterval(frameTimer);
-                frameTimer = null;
-                isPlaying = false;
-            }
-        }
-
-        function resetAnimation() {
-            pauseAnimation();
-            currentIndex = 0;
-            nextIndex = 1;
-            frameProgress = 0;
-            updateChart(gamafnMarketData[0]);
-            updateSeekPosition();
-        }
-
-        // Speed control
-        function updateSpeed() {
-            const speedSlider = document.getElementById('speedSlider');
-            const speedDisplay = document.getElementById('speedDisplay');
-            
-            if (speedSlider && speedDisplay) {
-                animationSpeed = parseInt(speedSlider.value);
-                speedDisplay.textContent = `${(animationSpeed / 1000).toFixed(2)}s`;
-            }
-        }
-
-        // Seek control
-        function updateSeek() {
-            const seekSlider = document.getElementById('seekSlider');
-            const timelineDisplay = document.getElementById('timelineDisplay');
-            
-            if (seekSlider && timelineDisplay && gamafnMarketData.length > 0) {
-                const seekValue = parseInt(seekSlider.value);
-                const targetIndex = Math.floor((seekValue / 100) * (gamafnMarketData.length - 1));
-                
-                pauseAnimation();
-                currentIndex = targetIndex;
-                nextIndex = currentIndex + 1;
-                if (nextIndex >= gamafnMarketData.length) nextIndex = 0;
-                frameProgress = 0;
-                
-                updateChart(gamafnMarketData[currentIndex]);
-                timelineDisplay.textContent = gamafnMarketData[currentIndex].displayDate;
-            }
-        }
-
-        function updateSeekPosition() {
-            const seekSlider = document.getElementById('seekSlider');
-            const timelineDisplay = document.getElementById('timelineDisplay');
-            
-            if (seekSlider && timelineDisplay && gamafnMarketData.length > 0) {
-                const progress = (currentIndex / (gamafnMarketData.length - 1)) * 100;
-                seekSlider.value = progress;
-                timelineDisplay.textContent = gamafnMarketData[currentIndex].displayDate;
-            }
-        }
-
-        // Initialize
-        function initialize() {
-            try {
-                createGridLines();
-                updateChart(gamafnMarketData[0]);
-                updateSeekPosition();
-                
-                const speedSlider = document.getElementById('speedSlider');
-                const seekSlider = document.getElementById('seekSlider');
-                
-                if (speedSlider) {
-                    speedSlider.addEventListener('input', updateSpeed);
-                }
-                
-                if (seekSlider) {
-                    seekSlider.addEventListener('input', updateSeek);
-                    seekSlider.max = 100;
-                }
-                
-                // Keyboard shortcuts
-                document.addEventListener('keydown', (e) => {
-                    if (e.code === 'Space') {
-                        e.preventDefault();
-                        isPlaying ? pauseAnimation() : startAnimation();
-                    } else if (e.code === 'KeyR') {
-                        resetAnimation();
-                    } else if (e.code === 'ArrowLeft') {
-                        pauseAnimation();
-                        currentIndex = Math.max(0, currentIndex - 1);
-                        nextIndex = currentIndex + 1;
-                        if (nextIndex >= gamafnMarketData.length) nextIndex = 0;
-                        frameProgress = 0;
-                        updateChart(gamafnMarketData[currentIndex]);
-                        updateSeekPosition();
-                    } else if (e.code === 'ArrowRight') {
-                        pauseAnimation();
-                        currentIndex = Math.min(gamafnMarketData.length - 1, currentIndex + 1);
-                        nextIndex = currentIndex + 1;
-                        if (nextIndex >= gamafnMarketData.length) nextIndex = 0;
-                        frameProgress = 0;
-                        updateChart(gamafnMarketData[currentIndex]);
-                        updateSeekPosition();
-                    }
-                });
-                
-            } catch (error) {
-                console.error('Initialization error:', error);
-            }
-        }
-
-        // Start when page loads
-        document.addEventListener('DOMContentLoaded', initialize);
-
-        // Make functions globally available
-        window.startAnimation = startAnimation;
-        window.pauseAnimation = pauseAnimation;
-        window.resetAnimation = resetAnimation;
-    </script>
 </body>
 </html>
