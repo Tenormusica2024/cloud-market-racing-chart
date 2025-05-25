@@ -5,27 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Market Share Racing Chart</title>
     <meta name="description" content="Interactive racing bar chart showing cloud service market share evolution from 2019-2025">
-    <meta name="keywords" content="cloud, AWS, Azure, Google Cloud, market share, data visualization">
-    <meta name="author" content="Your Name">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Cloud Market Share Racing Chart">
-    <meta property="og:description" content="Watch the cloud market evolution in real-time">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tenormusica2024.github.io/cloud-market-racing-chart">
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts - 最適化 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="particles" id="particles"></div>
+    <!-- パーティクルコンテナを削除 -->
     
     <div class="container">
         <div class="header">
-            <div class="title">✨ Cloud Market Analytics ✨</div>
+            <div class="title">Cloud Market Analytics</div>
             <div class="subtitle">Market Share Evolution • 2019-2025</div>
         </div>
         
@@ -45,8 +37,8 @@
         </div>
         
         <div class="speed-control">
-            <label>Animation Speed:</label>
-            <input type="range" class="speed-slider" min="200" max="1500" value="600" id="speedSlider">
+            <label>Speed:</label>
+            <input type="range" class="speed-slider" min="200" max="1200" value="600" id="speedSlider">
             <span id="speedDisplay">0.6s</span>
         </div>
         
@@ -54,24 +46,11 @@
             <div class="ranking-title">🏆 Current Rankings (April 2025)</div>
             <div class="ranking-grid" id="rankingGrid"></div>
         </div>
-        
-        <div class="info-section">
-            <h3>データについて</h3>
-            <p>このチャートは、2019年1月から2025年4月までのクラウドサービス市場シェアの推移を表示します。データは業界レポート（Gartner、Canalys等）を基にした推定値です。</p>
-            <ul>
-                <li><strong>AWS:</strong> Amazon Web Services</li>
-                <li><strong>Azure:</strong> Microsoft Azure</li>
-                <li><strong>Google:</strong> Google Cloud Platform</li>
-                <li><strong>Alibaba:</strong> Alibaba Cloud</li>
-                <li><strong>IBM:</strong> IBM Cloud</li>
-                <li><strong>Oracle:</strong> Oracle Cloud</li>
-            </ul>
-        </div>
     </div>
     
-    <!-- データを直接埋め込み -->
+    <!-- データ埋め込み - 最適化済み -->
     <script>
-    // Cloud Market Share Data
+    // 軽量化済みデータ
     const companyColors = {
         'AWS': 'linear-gradient(135deg, #ff9900, #ffbb33)',
         'Azure': 'linear-gradient(135deg, #0078d4, #40a9ff)',
@@ -81,6 +60,7 @@
         'Oracle': 'linear-gradient(135deg, #f80000, #ff4444)'
     };
 
+    // データ生成を最適化
     function generateCloudData() {
         const data = [];
         const yearlyBenchmarks = {
@@ -94,14 +74,12 @@
         
         const latest2025Data = {
             1: { AWS: 30.8, Azure: 26.5, Google: 11.2, Alibaba: 8.1, IBM: 2.9, Oracle: 2.0 },
-            2: { AWS: 30.6, Azure: 27.0, Google: 11.4, Alibaba: 8.2, IBM: 2.8, Oracle: 2.0 },
-            3: { AWS: 30.4, Azure: 27.5, Google: 11.6, Alibaba: 8.3, IBM: 2.7, Oracle: 2.0 },
             4: { AWS: 30.2, Azure: 28.0, Google: 11.8, Alibaba: 8.4, IBM: 2.6, Oracle: 2.0 }
         };
         
-        // Generate monthly data
+        // 月次データ生成（軽量化）
         for (let year = 2019; year <= 2024; year++) {
-            for (let month = 1; month <= 12; month++) {
+            for (let month = 1; month <= 12; month += 3) { // 3ヶ月間隔でデータポイント削減
                 const currentYearData = yearlyBenchmarks[year];
                 const nextYearData = yearlyBenchmarks[year + 1] || currentYearData;
                 const progress = (month - 1) / 11;
@@ -116,15 +94,14 @@
                     const currentValue = currentYearData[service];
                     const nextValue = nextYearData[service];
                     const interpolatedValue = currentValue + (nextValue - currentValue) * progress;
-                    const randomVariation = (Math.random() - 0.5) * 0.8;
-                    monthData[service] = Math.max(0, Math.round((interpolatedValue + randomVariation) * 10) / 10);
+                    monthData[service] = Math.max(0, Math.round(interpolatedValue * 10) / 10);
                 });
                 
                 data.push(monthData);
             }
         }
         
-        // Add 2025 data
+        // 2025年データ追加（削減版）
         Object.entries(latest2025Data).forEach(([month, monthData]) => {
             data.push({
                 year: 2025,
@@ -140,7 +117,6 @@
     const cloudMarketData = generateCloudData();
     </script>
     
-    <!-- JavaScript -->
     <script src="js/chart.js"></script>
 </body>
 </html>
