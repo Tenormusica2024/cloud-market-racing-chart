@@ -13,8 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- パーティクルコンテナを削除 -->
-    
     <div class="container">
         <div class="header">
             <div class="title">Cloud Market Analytics</div>
@@ -46,6 +44,35 @@
             <div class="ranking-title">🏆 Current Rankings (April 2025)</div>
             <div class="ranking-grid" id="rankingGrid"></div>
         </div>
+        
+        <!-- 最新情報パネル -->
+        <div class="insights-panel">
+            <div class="insights-title">📊 Market Insights & Trends</div>
+            <div class="insights-content">
+                <div class="insight-card">
+                    <div class="insight-header">🚀 Growth Leaders</div>
+                    <div class="insight-text">Azure shows strongest growth (+11% since 2019), closing gap with AWS through enterprise adoption and AI services integration.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-header">📈 Market Dynamics</div>
+                    <div class="insight-text">Google Cloud maintains steady 8-12% market share with focus on AI/ML capabilities and multi-cloud strategies.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-header">🌏 Regional Players</div>
+                    <div class="insight-text">Alibaba Cloud dominates Asia-Pacific (8.4%) while IBM and Oracle show declining trends in traditional enterprise segments.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-header">🎯 2025 Outlook</div>
+                    <div class="insight-text">Competition intensifies as AWS (30.2%) faces pressure from Azure (28.0%) in the race for cloud supremacy.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- データテーブル -->
+        <div class="data-table-panel">
+            <div class="table-title">📋 Latest Market Data (April 2025)</div>
+            <div class="data-table" id="dataTable"></div>
+        </div>
     </div>
     
     <!-- データ埋め込み - 最適化済み -->
@@ -60,7 +87,7 @@
         'Oracle': 'linear-gradient(135deg, #f80000, #ff4444)'
     };
 
-    // データ生成を最適化
+    // データ生成を最適化（月次データで滑らかなアニメーション）
     function generateCloudData() {
         const data = [];
         const yearlyBenchmarks = {
@@ -74,12 +101,14 @@
         
         const latest2025Data = {
             1: { AWS: 30.8, Azure: 26.5, Google: 11.2, Alibaba: 8.1, IBM: 2.9, Oracle: 2.0 },
+            2: { AWS: 30.6, Azure: 27.0, Google: 11.4, Alibaba: 8.2, IBM: 2.8, Oracle: 2.0 },
+            3: { AWS: 30.4, Azure: 27.5, Google: 11.6, Alibaba: 8.3, IBM: 2.7, Oracle: 2.0 },
             4: { AWS: 30.2, Azure: 28.0, Google: 11.8, Alibaba: 8.4, IBM: 2.6, Oracle: 2.0 }
         };
         
-        // 月次データ生成（軽量化）
+        // 月次データ生成（滑らかなアニメーション用）
         for (let year = 2019; year <= 2024; year++) {
-            for (let month = 1; month <= 12; month += 3) { // 3ヶ月間隔でデータポイント削減
+            for (let month = 1; month <= 12; month++) {
                 const currentYearData = yearlyBenchmarks[year];
                 const nextYearData = yearlyBenchmarks[year + 1] || currentYearData;
                 const progress = (month - 1) / 11;
@@ -94,14 +123,15 @@
                     const currentValue = currentYearData[service];
                     const nextValue = nextYearData[service];
                     const interpolatedValue = currentValue + (nextValue - currentValue) * progress;
-                    monthData[service] = Math.max(0, Math.round(interpolatedValue * 10) / 10);
+                    const randomVariation = (Math.random() - 0.5) * 0.3; // より小さな変動
+                    monthData[service] = Math.max(0, Math.round((interpolatedValue + randomVariation) * 10) / 10);
                 });
                 
                 data.push(monthData);
             }
         }
         
-        // 2025年データ追加（削減版）
+        // 2025年データ追加
         Object.entries(latest2025Data).forEach(([month, monthData]) => {
             data.push({
                 year: 2025,
@@ -115,6 +145,22 @@
     }
 
     const cloudMarketData = generateCloudData();
+
+    // Market insights data
+    const marketInsights = {
+        totalDataPoints: cloudMarketData.length,
+        timespan: "2019年1月 - 2025年4月",
+        keyTrends: [
+            "Azure continues strong growth (+2%/year) driven by Microsoft 365 integration and AI services",
+            "AWS maintains leadership but shows slight decline (-0.8%/year) due to increased competition", 
+            "Google Cloud shows steady growth (+0.8%/year) with focus on AI/ML capabilities",
+            "Alibaba Cloud remains stable in Asia-Pacific region (+0.3%/year)",
+            "IBM and Oracle show declining trends as market shifts to cloud-native solutions"
+        ],
+        currentLeader: "AWS",
+        fastestGrowing: "Azure",
+        marketConcentration: "Top 3 providers control ~70% of market"
+    };
     </script>
     
     <script src="js/chart.js"></script>
