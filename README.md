@@ -10,7 +10,7 @@ AWS / Azure / Google Cloud のクラウド市場シェア推移を、軽量な C
 - Canvas 2D によるチャート描画
 - Play / Pause / Reset
 - Timeline scrubber
-- Speed: 0.5x / 1x / 1.5x / 2x
+- Speed: 1x / 2x / 5x / 10x（default: 5x）
 - Reduced motion toggle
 - 非表示タブでの自動停止
 - 現在値のアクセシブルなテーブル表示

@@ -24,7 +24,7 @@
     theme: localStorage.getItem('cloud-racing-theme') || 'casual',
     virtualIndex: 39,
     playing: false,
-    speed: 1,
+    speed: 5,
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     lastStepTime: 0,
     lastFrameTime: 0,
@@ -37,7 +37,7 @@
 
   const data = buildQuarterData();
   const maxShare = 50;
-  const stepMs = () => Math.max(120, 900 / state.speed);
+  const stepMs = () => Math.max(45, 900 / state.speed);
 
   const canvas = document.getElementById('chartCanvas');
   const ctx = canvas.getContext('2d', { alpha: true });
@@ -321,7 +321,7 @@
   function drawAxis(layout, isCasual) {
     const { left, top, chartWidth, height } = layout;
     ctx.save();
-    ctx.font = '700 14px Inter, system-ui, sans-serif';
+    ctx.font = '600 13px Inter, system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     for (let value = 0; value <= maxShare; value += 10) {
@@ -376,7 +376,7 @@
   function drawProviderLabel(row, x, y, isCasual) {
     ctx.save();
     ctx.fillStyle = isCasual ? '#f8fbff' : '#111827';
-    ctx.font = '900 23px Inter, system-ui, sans-serif';
+    ctx.font = '800 22px Inter, system-ui, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     const lines = row.label.split('\n');
@@ -448,7 +448,7 @@
     ctx.fillStyle = isCasual ? color : '#111827';
     ctx.shadowColor = isCasual ? color : 'transparent';
     ctx.shadowBlur = isCasual ? 12 : 0;
-    ctx.font = '950 27px Inter, system-ui, sans-serif';
+    ctx.font = '800 25px Inter, system-ui, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(`${value.toFixed(1)}%`, x, y);

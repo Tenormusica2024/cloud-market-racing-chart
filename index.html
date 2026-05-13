@@ -15,9 +15,9 @@
   <main class="app-shell" aria-labelledby="app-title">
     <header class="hero-panel">
       <div class="hero-copy">
-        <p class="eyebrow">Canvas renderer · 60fps target · Reduced motion ready</p>
+        <p class="eyebrow">Canvas 2D renderer / 60fps target / Reduced motion ready</p>
         <h1 id="app-title">Cloud Market Racing Chart v2</h1>
-        <p class="lead">AWS / Azure / Google Cloud の市場シェア推移を、軽量な Canvas レンダリングで操作できるレーシングチャート。</p>
+        <p class="lead">AWS / Azure / Google Cloud の市場シェアを、軽量な Canvas 描画でなめらかに再生。</p>
       </div>
 
       <div class="mode-switch" role="tablist" aria-label="表示モード">
@@ -91,10 +91,10 @@
       <div class="control-grid">
         <fieldset class="speed-group" aria-label="Speed">
           <legend>Speed</legend>
-          <button type="button" data-speed="0.5">0.5x</button>
-          <button type="button" data-speed="1" class="is-active">1x</button>
-          <button type="button" data-speed="1.5">1.5x</button>
+          <button type="button" data-speed="1">1x</button>
           <button type="button" data-speed="2">2x</button>
+          <button type="button" data-speed="5" class="is-active">5x</button>
+          <button type="button" data-speed="10">10x</button>
         </fieldset>
 
         <div class="status-pills" aria-label="Rendering status">

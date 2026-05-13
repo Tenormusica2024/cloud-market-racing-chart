@@ -4,8 +4,8 @@
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
-  --shadow-soft: 0 28px 80px rgba(7, 10, 25, 0.22);
-  --shadow-neon: 0 0 36px rgba(59, 130, 246, 0.26), 0 0 90px rgba(217, 70, 239, 0.16);
+  --shadow-soft: 0 24px 70px rgba(7, 10, 25, 0.18);
+  --shadow-neon: 0 0 28px rgba(59, 130, 246, 0.20), 0 0 74px rgba(217, 70, 239, 0.12);
   --aws: #ff8a18;
   --azure: #1f6fff;
   --gcp: #11d7d0;
@@ -27,6 +27,9 @@ body {
   color: var(--text);
   background: var(--page-bg);
   transition: background 360ms ease, color 220ms ease;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body[data-theme="formal"] {
@@ -142,9 +145,9 @@ body[data-theme="formal"] .ambient {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  min-height: 118px;
+  min-height: 116px;
   margin-bottom: 18px;
-  padding: 24px 28px;
+  padding: 26px 30px;
   border-radius: var(--radius-xl);
 }
 
@@ -156,8 +159,18 @@ body[data-theme="formal"] .ambient {
   margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-transform: none;
+}
+
+.panel-label,
+.metric-card span,
+.frame-budget span,
+.speed-group legend {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
   text-transform: uppercase;
 }
 
@@ -168,18 +181,23 @@ p {
 }
 
 h1 {
-  max-width: 860px;
-  margin-bottom: 8px;
-  font-size: clamp(2.35rem, 5vw, 4.55rem);
-  line-height: 0.95;
-  letter-spacing: -0.075em;
+  max-width: 880px;
+  margin-bottom: 10px;
+  font-size: clamp(2.25rem, 4.7vw, 4.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  font-weight: 800;
+  text-wrap: balance;
 }
 
 .lead {
-  max-width: 760px;
+  max-width: 780px;
   margin-bottom: 0;
   color: var(--muted-strong);
-  font-size: clamp(0.98rem, 1.4vw, 1.16rem);
+  font-size: clamp(0.98rem, 1.25vw, 1.1rem);
+  line-height: 1.72;
+  letter-spacing: 0.005em;
+  text-wrap: pretty;
 }
 
 .mode-switch {
@@ -198,7 +216,8 @@ h1 {
   border-radius: 999px;
   background: transparent;
   color: var(--muted-strong);
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: 0.005em;
 }
 
 .mode-button.is-active {
@@ -281,7 +300,8 @@ body[data-theme="casual"] .chart-card::before {
   min-height: 52px;
   padding: 0 24px;
   border-radius: 12px;
-  font-weight: 850;
+  font-weight: 700;
+  letter-spacing: 0.005em;
 }
 
 .action-button--primary,
@@ -341,15 +361,19 @@ body.is-playing #pauseButton {
   display: inline-block;
   margin-top: 8px;
   color: var(--accent);
-  font-size: 1.55rem;
-  line-height: 1;
+  font-size: 1.46rem;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .metric-card b {
   float: right;
   margin-top: 12px;
   color: var(--accent);
-  font-size: 1.15rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .metric-card--sparkline svg {
@@ -411,6 +435,10 @@ body.is-playing #pauseButton {
   text-decoration: none;
 }
 
+.source-link span {
+  margin-left: 4px;
+}
+
 .control-panel {
   margin-top: 18px;
   padding: 20px 24px;
@@ -460,7 +488,8 @@ input[type="range"] {
   min-width: 58px;
   height: 42px;
   border-radius: 12px;
-  font-weight: 850;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .speed-group button.is-active {
@@ -486,8 +515,8 @@ input[type="range"] {
   border-radius: 13px;
   background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
   color: var(--accent);
-  font-size: 0.84rem;
-  font-weight: 850;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .pill--green {
@@ -512,7 +541,9 @@ input[type="range"] {
   display: block;
   margin-top: 4px;
   color: #55d987;
-  font-size: 1.15rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .data-access {
