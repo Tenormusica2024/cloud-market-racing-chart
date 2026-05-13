@@ -606,6 +606,71 @@ body[data-theme="casual"] .metric-card b {
   position: relative;
 }
 
+.metric-card--google-momentum {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, #17d6ce 34%, var(--panel-border));
+}
+
+.metric-card--google-momentum::after {
+  content: "";
+  position: absolute;
+  inset: auto -44px -62px auto;
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(23, 214, 206, 0.24), transparent 58%),
+    radial-gradient(circle at 30% 28%, rgba(47, 109, 246, 0.18), transparent 52%);
+  pointer-events: none;
+}
+
+.momentum-stats {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.momentum-stats div {
+  min-width: 0;
+  padding: 8px 7px;
+  border: 1px solid color-mix(in srgb, #17d6ce 20%, var(--panel-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel-strong) 72%, rgba(23, 214, 206, 0.12));
+}
+
+.momentum-stats em {
+  display: block;
+  color: #17d6ce;
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.momentum-stats small,
+.metric-card--google-momentum > small {
+  display: block;
+  color: var(--muted-strong);
+  line-height: 1.35;
+}
+
+.momentum-stats small {
+  margin-top: 3px;
+  font-size: 0.58rem;
+}
+
+.metric-card--google-momentum > small {
+  position: relative;
+  z-index: 1;
+  margin-top: 9px;
+  font-size: 0.75rem;
+}
+
 .metric-card--neocloud {
   position: relative;
   overflow: hidden;
