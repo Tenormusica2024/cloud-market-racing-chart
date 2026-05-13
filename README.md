@@ -39,7 +39,7 @@ AWS / Azure / Google Cloud のクラウド市場シェア推移を、軽量な C
   - https://www.canalys.com/newsroom/worldwide-cloud-q4-2023
   - https://newsflash.tdsynnex.co.uk/industry-updates/worldwide-cloud-service-spending-to-grow-by-19-in-2025/6711
   - https://omdia.tech.informa.com/pr/2025/jun/global-cloud-infrastructure-spending-rose-21percent-in-q1-2025
-  - https://www.comparethecloud.net/news/omdia-aws-google-cloud-gain-market-share-amid-20-cloud-infrastructure-spending-growth-in-4q24/
+  - https://www.comparethecloud.net/news/global-cloud-infrastructure-spending-hit-1109-billion-in-q4-2025-omdia-reports
   - https://www.srgresearch.com/articles/cloud-market-growth-rate-jumps-as-annual-spending-forecast-is-increased-by-65-billion
 
 ## Local preview
