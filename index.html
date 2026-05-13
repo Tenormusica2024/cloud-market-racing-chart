@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cloud Market Racing Chart v2</title>
-  <meta name="description" content="AWS, Azure, and Google Cloud market share trends visualized as a lightweight Canvas racing bar chart.">
+  <meta name="description" content="Top cloud providers market share trends visualized as a lightweight Canvas racing bar chart.">
   <meta name="theme-color" content="#050815">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -21,7 +21,7 @@
       <div class="hero-copy">
         <p class="eyebrow">Canvas 2D renderer / 60fps target / Reduced motion ready</p>
         <h1 id="app-title">Cloud Market Racing Chart v2</h1>
-        <p class="lead">AWS / Azure / Google Cloud の市場シェアを、軽量な Canvas 描画でなめらかに再生。</p>
+        <p class="lead">AWS / Azure / Google Cloud / Oracle / Alibaba の市場シェアを、軽量な Canvas 描画でなめらかに再生。</p>
         <div class="race-badge" aria-label="Timeline from 2018 Q4 to 2026 Q1">
           <strong>2018 Q4 <span aria-hidden="true">→</span> 2026 Q1</strong>
           <small>Market Share Race</small>
@@ -53,15 +53,15 @@
         </div>
 
         <div class="chart-stage">
-          <canvas id="chartCanvas" aria-label="AWS, Azure, and Google Cloud market share racing bar chart"></canvas>
+          <canvas id="chartCanvas" aria-label="Top cloud providers market share racing bar chart"></canvas>
         </div>
       </section>
 
       <aside class="insight-rail" aria-label="Insights">
         <article class="metric-card metric-card--sparkline">
           <span id="sparkDate">2026 Q1</span>
-          <strong id="sparkValue" class="spark-value">Top 3 63.0%</strong>
-          <svg viewBox="0 0 160 56" role="img" aria-label="Top three cloud providers share trend">
+          <strong id="sparkValue" class="spark-value">Top 5 71.0%</strong>
+          <svg viewBox="0 0 160 56" role="img" aria-label="Top five cloud providers share trend">
             <path id="sparkPath" class="spark-path" d="" />
             <path id="sparkProgress" class="spark-progress" d="" />
             <circle id="sparkMarker" cx="156" cy="8" r="5" />
@@ -75,18 +75,24 @@
         </article>
 
         <article class="metric-card metric-card--donut">
-          <span>Provider Mix</span>
-          <strong id="trackedShareValue">Top 3 63.0%</strong>
+          <span>Top 5 Mix</span>
+          <strong id="trackedShareValue">Top 5 71.0%</strong>
           <div class="donut" id="shareDonut" aria-hidden="true"></div>
-          <small id="donutCaption">Market share AWS 28.0 / Azure 21.0 / GCP 14.0</small>
+          <small id="donutCaption">AWS 28.0 / Azure 21.0 / GCP 14.0 / Oracle 4.0 / Alibaba 4.0</small>
+        </article>
+
+        <article class="metric-card metric-card--neocloud">
+          <span>AI Neoclouds</span>
+          <strong id="neocloudValue">5.0%</strong>
+          <small id="neocloudCaption">AI-focused challengers are about 5% of the total cloud market.</small>
         </article>
 
         <article class="metric-card metric-card--changes">
-          <span id="changeTitle">Change vs Q4 2025</span>
+          <span id="changeTitle">Change vs 2025 Q4</span>
           <dl id="changeList"></dl>
         </article>
 
-        <a class="source-link" href="https://www.srgresearch.com/articles/cloud-market-growth-rate-jumps-as-annual-spending-forecast-is-increased-by-65-billion" target="_blank" rel="noopener noreferrer">
+        <a class="source-link" href="https://www.crnasia.com/news-network/2026/cloud-market-share-q1-2026-aws-microsoft-google-battling-in-ai-era" target="_blank" rel="noopener noreferrer">
           Source <span aria-hidden="true">↗</span>
         </a>
       </aside>

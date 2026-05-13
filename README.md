@@ -29,8 +29,10 @@ AWS / Azure / Google Cloud のクラウド市場シェア推移を、軽量な C
 - AWS / Azure / Google Cloud の値は、Canalys / Omdia / Synergy Research Group などの公開市場シェア記事を基準点にしています。
 - 最新の実測基準点は Synergy Research Group が 2026-04-29 に公開した 2026 Q1 の市場シェアです。
 - 中間四半期は、公開値の間を線形補間したデモ用の推移です。
-- 右側の `Provider Mix` は AWS / Azure / Google Cloud の合計を 100% とした構成比で表示し、キャプションには実際の市場シェア値を表示します。
-- 2026 Q1 の最新値: AWS 28% / Microsoft Azure 21% / Google 14%。
+- 右側の `Top 5 Mix` は AWS / Azure / Google Cloud / Oracle Cloud / Alibaba Cloud の合計を 100% とした構成比で表示し、キャプションには実際の市場シェア値を表示します。
+- 2026 Q1 の最新Top 5値: AWS 28% / Microsoft Azure 21% / Google 14% / Oracle 4% / Alibaba 4%。
+- `AI Neoclouds` は単体プロバイダーではなく、AI-focused challengers の市場シグナルとして右側インサイトに分離表示しています。2026 Q1時点の集計値は約5%です。
+- Oracle / Alibaba の2025-2026値は公開記事の値を優先しています。2024以前の4番手以降は、過去推移を見せるための補間・文脈値を含みます。
 - 参照例:
   - https://canalys.dev/newsroom/canalys-worldwide-cloud-infrastructure-Q4-2019-and-full-year-2019
   - https://www.canalys.com/newsroom/global-cloud-market-q4-2020
@@ -41,6 +43,8 @@ AWS / Azure / Google Cloud のクラウド市場シェア推移を、軽量な C
   - https://omdia.tech.informa.com/pr/2025/jun/global-cloud-infrastructure-spending-rose-21percent-in-q1-2025
   - https://www.comparethecloud.net/news/global-cloud-infrastructure-spending-hit-1109-billion-in-q4-2025-omdia-reports
   - https://www.srgresearch.com/articles/cloud-market-growth-rate-jumps-as-annual-spending-forecast-is-increased-by-65-billion
+  - https://www.srgresearch.com/articles/cloud-market-annual-revenue-run-rate-topped-half-a-trillion-dollars-in-q1-as-growth-surge-continues
+  - https://www.crnasia.com/news-network/2026/cloud-market-share-q1-2026-aws-microsoft-google-battling-in-ai-era
 
 ## Local preview
 

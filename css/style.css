@@ -606,6 +606,24 @@ body[data-theme="casual"] .metric-card b {
   position: relative;
 }
 
+.metric-card--neocloud {
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card--neocloud::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  bottom: -24px;
+  width: 110px;
+  height: 110px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.22), rgba(29, 204, 255, 0.09) 42%, transparent 68%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
 .donut {
   width: 64px;
   height: 64px;
@@ -621,6 +639,16 @@ body[data-theme="casual"] .metric-card b {
   margin-top: 10px;
   color: var(--muted-strong);
   font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.metric-card--neocloud small {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 8px;
+  color: var(--muted-strong);
+  font-size: 0.76rem;
   line-height: 1.45;
 }
 

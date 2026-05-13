@@ -2,24 +2,26 @@
   'use strict';
 
   const providers = [
-    { key: 'AWS', label: 'AWS', color: '#2f6df6', casual: '#18a8ff' },
-    { key: 'Azure', label: 'Azure', color: '#ff6b12', casual: '#ff8a18' },
-    { key: 'Google Cloud', label: 'Google\nCloud', color: '#0aa39e', casual: '#17d6ce' },
+    { key: 'AWS', label: 'AWS', short: 'AWS', color: '#2f6df6', casual: '#18a8ff' },
+    { key: 'Azure', label: 'Azure', short: 'Azure', color: '#ff6b12', casual: '#ff8a18' },
+    { key: 'Google Cloud', label: 'Google\nCloud', short: 'GCP', color: '#0aa39e', casual: '#17d6ce' },
+    { key: 'Oracle Cloud', label: 'Oracle\nCloud', short: 'Oracle', color: '#d8325b', casual: '#ff3c6f' },
+    { key: 'Alibaba Cloud', label: 'Alibaba\nCloud', short: 'Alibaba', color: '#f59e0b', casual: '#ffd166' },
   ];
 
   // Public market share reference points. Intermediate quarters are interpolated
   // for demo playback instead of being presented as independently sourced data.
   const anchors = [
-    { year: 2018, quarter: 4, values: { AWS: 33.4, Azure: 14.5, 'Google Cloud': 4.9 } },
-    { year: 2019, quarter: 4, values: { AWS: 32.4, Azure: 17.6, 'Google Cloud': 6.0 } },
-    { year: 2020, quarter: 4, values: { AWS: 31.0, Azure: 20.0, 'Google Cloud': 7.0 } },
-    { year: 2021, quarter: 4, values: { AWS: 33.0, Azure: 22.0, 'Google Cloud': 9.0 } },
-    { year: 2022, quarter: 4, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
-    { year: 2023, quarter: 4, values: { AWS: 31.0, Azure: 26.0, 'Google Cloud': 10.0 } },
-    { year: 2024, quarter: 4, values: { AWS: 33.0, Azure: 20.0, 'Google Cloud': 11.0 } },
-    { year: 2025, quarter: 1, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
-    { year: 2025, quarter: 4, values: { AWS: 32.0, Azure: 22.0, 'Google Cloud': 12.0 } },
-    { year: 2026, quarter: 1, values: { AWS: 28.0, Azure: 21.0, 'Google Cloud': 14.0 } },
+    { year: 2018, quarter: 4, neocloud: 0.0, values: { AWS: 33.4, Azure: 14.5, 'Google Cloud': 4.9, 'Oracle Cloud': 1.5, 'Alibaba Cloud': 4.0 } },
+    { year: 2019, quarter: 4, neocloud: 0.0, values: { AWS: 32.4, Azure: 17.6, 'Google Cloud': 6.0, 'Oracle Cloud': 1.7, 'Alibaba Cloud': 4.0 } },
+    { year: 2020, quarter: 4, neocloud: 0.2, values: { AWS: 31.0, Azure: 20.0, 'Google Cloud': 7.0, 'Oracle Cloud': 2.0, 'Alibaba Cloud': 4.0 } },
+    { year: 2021, quarter: 4, neocloud: 0.5, values: { AWS: 33.0, Azure: 22.0, 'Google Cloud': 9.0, 'Oracle Cloud': 2.0, 'Alibaba Cloud': 4.0 } },
+    { year: 2022, quarter: 4, neocloud: 1.0, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0, 'Oracle Cloud': 2.5, 'Alibaba Cloud': 4.0 } },
+    { year: 2023, quarter: 4, neocloud: 2.0, values: { AWS: 31.0, Azure: 26.0, 'Google Cloud': 10.0, 'Oracle Cloud': 2.5, 'Alibaba Cloud': 4.0 } },
+    { year: 2024, quarter: 4, neocloud: 3.0, values: { AWS: 33.0, Azure: 20.0, 'Google Cloud': 11.0, 'Oracle Cloud': 3.0, 'Alibaba Cloud': 4.0 } },
+    { year: 2025, quarter: 1, neocloud: 3.5, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0, 'Oracle Cloud': 3.0, 'Alibaba Cloud': 4.0 } },
+    { year: 2025, quarter: 4, neocloud: 4.5, values: { AWS: 32.0, Azure: 22.0, 'Google Cloud': 12.0, 'Oracle Cloud': 3.0, 'Alibaba Cloud': 4.0 } },
+    { year: 2026, quarter: 1, neocloud: 5.0, values: { AWS: 28.0, Azure: 21.0, 'Google Cloud': 14.0, 'Oracle Cloud': 4.0, 'Alibaba Cloud': 4.0 } },
   ];
 
   const data = buildQuarterData();
@@ -60,6 +62,8 @@
   const trackedShareValue = document.getElementById('trackedShareValue');
   const shareDonut = document.getElementById('shareDonut');
   const donutCaption = document.getElementById('donutCaption');
+  const neocloudValue = document.getElementById('neocloudValue');
+  const neocloudCaption = document.getElementById('neocloudCaption');
   const changeTitle = document.getElementById('changeTitle');
   const changeList = document.getElementById('changeList');
   const dataTable = document.getElementById('dataTable');
@@ -198,6 +202,7 @@
           label: `${year} Q${quarter}`,
           year,
           quarter,
+          neocloud: round1(lerp(current.neocloud ?? 0, next.neocloud ?? 0, localT)),
           values,
         });
       }
@@ -207,6 +212,7 @@
       label: `${last.year} Q${last.quarter}`,
       year: last.year,
       quarter: last.quarter,
+      neocloud: last.neocloud ?? 0,
       values: { ...last.values },
     });
     return rows;
@@ -254,6 +260,7 @@
 
     return {
       label: t < 0.5 ? low.label : high.label,
+      neocloud: round1(lerp(low.neocloud ?? 0, high.neocloud ?? 0, t)),
       values,
       rows: providers
         .map((provider) => ({ ...provider, value: values[provider.key] }))
@@ -326,8 +333,9 @@
     const left = Math.min(230, Math.max(174, width * 0.22));
     const right = Math.min(96, Math.max(58, width * 0.09));
     const top = Math.min(92, Math.max(58, height * 0.16));
-    const rowGap = Math.max(22, height * 0.075);
-    const barHeight = Math.min(58, Math.max(36, height * 0.12));
+    const availableHeight = Math.max(240, height - top - 52);
+    const rowGap = Math.min(24, Math.max(12, height * 0.044));
+    const barHeight = Math.min(52, Math.max(29, (availableHeight - rowGap * (providers.length - 1)) / providers.length));
     return {
       width,
       height,
@@ -631,33 +639,40 @@
 
   function syncLiveInsights(snapshot) {
     const leader = snapshot.rows[0];
-    const aws = snapshot.values.AWS;
-    const azure = snapshot.values.Azure;
-    const google = snapshot.values['Google Cloud'];
     const trackedShare = getTrackedShare(snapshot.values);
     const spark = getSparkPoint(state.virtualIndex);
     const progressPoints = sparkModel.points.slice(0, spark.index + 1).concat(spark);
     const isCasual = state.theme === 'casual';
-    const awsColor = isCasual ? providers[0].casual : providers[0].color;
-    const azureColor = isCasual ? providers[1].casual : providers[1].color;
-    const googleColor = isCasual ? providers[2].casual : providers[2].color;
     const safeTrackedShare = Math.max(0.1, trackedShare);
-    const awsMix = (aws / safeTrackedShare) * 100;
-    const azureMix = (azure / safeTrackedShare) * 100;
-    const googleMix = Math.max(0, 100 - awsMix - azureMix);
-    const azureEnd = awsMix + azureMix;
+    let cursor = 0;
+    const segments = providers.map((provider, index) => {
+      const share = snapshot.values[provider.key];
+      const mix = index === providers.length - 1
+        ? Math.max(0, 100 - cursor)
+        : (share / safeTrackedShare) * 100;
+      const start = cursor;
+      const end = cursor + mix;
+      cursor = end;
+      return `${isCasual ? provider.casual : provider.color} ${start}% ${end}%`;
+    });
 
     leaderName.textContent = leader.key;
     leaderValue.textContent = `${leader.value.toFixed(1)}%`;
     sparkDate.textContent = snapshot.label;
-    sparkValue.textContent = `Top 3 ${trackedShare.toFixed(1)}%`;
+    sparkValue.textContent = `Top 5 ${trackedShare.toFixed(1)}%`;
     sparkPath.setAttribute('d', sparkModel.path);
     sparkProgress.setAttribute('d', toPath(progressPoints));
     sparkMarker.setAttribute('cx', spark.x.toFixed(1));
     sparkMarker.setAttribute('cy', spark.y.toFixed(1));
-    trackedShareValue.textContent = `Top 3 ${trackedShare.toFixed(1)}%`;
-    donutCaption.textContent = `Market share AWS ${aws.toFixed(1)} / Azure ${azure.toFixed(1)} / GCP ${google.toFixed(1)}`;
-    shareDonut.style.background = `conic-gradient(${awsColor} 0 ${awsMix}%, ${azureColor} ${awsMix}% ${azureEnd}%, ${googleColor} ${azureEnd}% ${azureEnd + googleMix}%)`;
+    trackedShareValue.textContent = `Top 5 ${trackedShare.toFixed(1)}%`;
+    donutCaption.textContent = snapshot.rows
+      .map((provider) => `${provider.short} ${provider.value.toFixed(1)}`)
+      .join(' / ');
+    neocloudValue.textContent = `${snapshot.neocloud.toFixed(1)}%`;
+    neocloudCaption.textContent = snapshot.neocloud >= 4.9
+      ? 'AI-focused challengers are about 5% of the total cloud market.'
+      : 'AI-focused challengers are tracked as a contextual growth signal.';
+    shareDonut.style.background = `conic-gradient(${segments.join(', ')})`;
   }
 
   function syncDom(force) {
