@@ -36,6 +36,7 @@
   };
 
   const data = buildQuarterData();
+  const sparkModel = buildSparkModel(data);
   const maxShare = 50;
   const stepMs = () => Math.max(45, 900 / state.speed);
 
@@ -48,6 +49,14 @@
   const resetButton = document.getElementById('resetButton');
   const leaderName = document.getElementById('leaderName');
   const leaderValue = document.getElementById('leaderValue');
+  const sparkDate = document.getElementById('sparkDate');
+  const sparkValue = document.getElementById('sparkValue');
+  const sparkPath = document.getElementById('sparkPath');
+  const sparkProgress = document.getElementById('sparkProgress');
+  const sparkMarker = document.getElementById('sparkMarker');
+  const trackedShareValue = document.getElementById('trackedShareValue');
+  const shareDonut = document.getElementById('shareDonut');
+  const donutCaption = document.getElementById('donutCaption');
   const changeList = document.getElementById('changeList');
   const dataTable = document.getElementById('dataTable');
   const frameBudget = document.getElementById('frameBudget');
@@ -188,6 +197,23 @@
     return rows;
   }
 
+  function buildSparkModel(rows) {
+    const totals = rows.map((row) => getTrackedShare(row.values));
+    const min = Math.min(...totals);
+    const max = Math.max(...totals);
+    const range = Math.max(1, max - min);
+    const points = totals.map((total, index) => ({
+      x: 6 + (index / Math.max(1, totals.length - 1)) * 148,
+      y: 48 - ((total - min) / range) * 38,
+      total,
+    }));
+
+    return {
+      points,
+      path: toPath(points),
+    };
+  }
+
   function getInterpolatedSnapshot(position) {
     const lowIndex = Math.floor(position);
     const highIndex = Math.min(data.length - 1, lowIndex + 1);
@@ -252,6 +278,22 @@
     const layout = getChartLayout(width, height);
     drawAxis(layout, isCasual);
     drawBars(snapshot, layout, isCasual);
+    syncLiveInsights(snapshot);
+  }
+
+  function getSparkPoint(position) {
+    const lowIndex = clamp(Math.floor(position), 0, sparkModel.points.length - 1);
+    const highIndex = Math.min(sparkModel.points.length - 1, lowIndex + 1);
+    const t = clamp(position - lowIndex, 0, 1);
+    const low = sparkModel.points[lowIndex];
+    const high = sparkModel.points[highIndex];
+
+    return {
+      index: lowIndex,
+      x: lerp(low.x, high.x, t),
+      y: lerp(low.y, high.y, t),
+      total: lerp(low.total, high.total, t),
+    };
   }
 
   function getChartLayout(width, height) {
@@ -455,6 +497,35 @@
     ctx.restore();
   }
 
+  function syncLiveInsights(snapshot) {
+    const leader = snapshot.rows[0];
+    const aws = snapshot.values.AWS;
+    const azure = snapshot.values.Azure;
+    const google = snapshot.values['Google Cloud'];
+    const trackedShare = getTrackedShare(snapshot.values);
+    const spark = getSparkPoint(state.virtualIndex);
+    const progressPoints = sparkModel.points.slice(0, spark.index + 1).concat(spark);
+    const isCasual = state.theme === 'casual';
+    const awsColor = isCasual ? providers[0].casual : providers[0].color;
+    const azureColor = isCasual ? providers[1].casual : providers[1].color;
+    const googleColor = isCasual ? providers[2].casual : providers[2].color;
+    const otherColor = isCasual ? 'rgba(145, 166, 196, 0.26)' : 'rgba(100, 116, 139, 0.22)';
+    const azureEnd = aws + azure;
+    const googleEnd = trackedShare;
+
+    leaderName.textContent = leader.key;
+    leaderValue.textContent = `${leader.value.toFixed(1)}%`;
+    sparkDate.textContent = snapshot.label;
+    sparkValue.textContent = `Top 3 ${trackedShare.toFixed(1)}%`;
+    sparkPath.setAttribute('d', sparkModel.path);
+    sparkProgress.setAttribute('d', toPath(progressPoints));
+    sparkMarker.setAttribute('cx', spark.x.toFixed(1));
+    sparkMarker.setAttribute('cy', spark.y.toFixed(1));
+    trackedShareValue.textContent = `${trackedShare.toFixed(1)}%`;
+    donutCaption.textContent = `AWS ${aws.toFixed(1)} / Azure ${azure.toFixed(1)} / GCP ${google.toFixed(1)}`;
+    shareDonut.style.background = `conic-gradient(${awsColor} 0 ${aws}%, ${azureColor} ${aws}% ${azureEnd}%, ${googleColor} ${azureEnd}% ${googleEnd}%, ${otherColor} ${googleEnd}% 100%)`;
+  }
+
   function syncDom(force) {
     const index = clamp(Math.round(state.virtualIndex), 0, data.length - 1);
     if (!force && index === state.lastSyncedIndex) return;
@@ -511,6 +582,17 @@
 
   function round1(value) {
     return Math.round(value * 10) / 10;
+  }
+
+  function getTrackedShare(values) {
+    return round1(providers.reduce((sum, provider) => sum + values[provider.key], 0));
+  }
+
+  function toPath(points) {
+    if (!points.length) return '';
+    return points
+      .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`)
+      .join(' ');
   }
 
   function colorMix(hex, mixHex, amount) {

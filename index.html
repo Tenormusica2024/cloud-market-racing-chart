@@ -51,10 +51,12 @@
 
       <aside class="insight-rail" aria-label="Insights">
         <article class="metric-card metric-card--sparkline">
-          <span>2024 Q4</span>
-          <svg viewBox="0 0 160 56" role="img" aria-label="Market share momentum sparkline">
-            <path d="M4 42 C18 36 26 44 39 31 C51 19 60 32 74 24 C89 15 99 20 112 12 C130 0 139 10 156 4" />
-            <circle cx="156" cy="4" r="5" />
+          <span id="sparkDate">2024 Q4</span>
+          <strong id="sparkValue" class="spark-value">Top 3 66.7%</strong>
+          <svg viewBox="0 0 160 56" role="img" aria-label="Top three cloud providers share trend">
+            <path id="sparkPath" class="spark-path" d="" />
+            <path id="sparkProgress" class="spark-progress" d="" />
+            <circle id="sparkMarker" cx="156" cy="8" r="5" />
           </svg>
         </article>
 
@@ -65,9 +67,10 @@
         </article>
 
         <article class="metric-card metric-card--donut">
-          <span>Total Market</span>
-          <strong>100%</strong>
-          <div class="donut" aria-hidden="true"></div>
+          <span>Tracked Share</span>
+          <strong id="trackedShareValue">66.7%</strong>
+          <div class="donut" id="shareDonut" aria-hidden="true"></div>
+          <small id="donutCaption">AWS 33.6 / Azure 22.7 / GCP 10.4</small>
         </article>
 
         <article class="metric-card metric-card--changes">
