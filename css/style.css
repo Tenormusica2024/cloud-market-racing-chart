@@ -1,11 +1,11 @@
 :root {
   color-scheme: dark;
   --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --radius-xl: 28px;
-  --radius-lg: 20px;
-  --radius-md: 14px;
+  --radius-xl: 30px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
   --shadow-soft: 0 24px 70px rgba(7, 10, 25, 0.18);
-  --shadow-neon: 0 0 28px rgba(59, 130, 246, 0.20), 0 0 74px rgba(217, 70, 239, 0.12);
+  --shadow-neon: 0 0 36px rgba(59, 130, 246, 0.25), 0 0 96px rgba(249, 115, 22, 0.12), 0 22px 90px rgba(0, 0, 0, 0.48);
   --aws: #ff8a18;
   --azure: #1f6fff;
   --gcp: #11d7d0;
@@ -51,18 +51,22 @@ body[data-theme="formal"] {
 
 body[data-theme="casual"] {
   color-scheme: dark;
-  --page-bg: radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.34), transparent 32rem), radial-gradient(circle at 82% 14%, rgba(217, 70, 239, 0.28), transparent 26rem), linear-gradient(135deg, #050815 0%, #090d1a 45%, #130521 100%);
+  --page-bg:
+    radial-gradient(circle at 76% 6%, rgba(36, 104, 255, 0.34), transparent 30rem),
+    radial-gradient(circle at 18% 4%, rgba(14, 165, 233, 0.22), transparent 34rem),
+    radial-gradient(circle at 88% 52%, rgba(249, 115, 22, 0.22), transparent 28rem),
+    linear-gradient(135deg, #01040c 0%, #04091a 42%, #100516 100%);
   --text: #f8fbff;
-  --muted: #91a6c4;
-  --muted-strong: #c8d7f2;
-  --panel: rgba(5, 10, 25, 0.72);
-  --panel-strong: rgba(7, 12, 28, 0.92);
-  --panel-border: rgba(125, 211, 252, 0.22);
-  --button: rgba(10, 18, 42, 0.82);
+  --muted: #8ea7cb;
+  --muted-strong: #d1e2ff;
+  --panel: rgba(3, 8, 20, 0.76);
+  --panel-strong: rgba(3, 7, 18, 0.92);
+  --panel-border: rgba(93, 210, 255, 0.30);
+  --button: rgba(7, 15, 34, 0.86);
   --button-text: #ecf7ff;
-  --accent: #18c8ff;
-  --accent-2: #df2df1;
-  --grid: rgba(103, 232, 249, 0.16);
+  --accent: #1dccff;
+  --accent-2: #ff8a18;
+  --grid: rgba(88, 210, 255, 0.18);
   --shadow: var(--shadow-neon);
 }
 
@@ -77,8 +81,26 @@ body::before {
   opacity: 0.38;
 }
 
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto -10vw -18vh;
+  height: 48vh;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 22%, rgba(29, 204, 255, 0.18), transparent 62%),
+    conic-gradient(from 252deg at 50% 46%, transparent 0 18deg, rgba(29, 204, 255, 0.16) 22deg 30deg, transparent 36deg 100deg, rgba(255, 138, 24, 0.16) 106deg 116deg, transparent 124deg 360deg);
+  filter: blur(2px);
+  opacity: 0.8;
+  transform: perspective(700px) rotateX(58deg);
+}
+
 body[data-theme="formal"]::before {
   opacity: 0.26;
+}
+
+body[data-theme="formal"]::after {
+  opacity: 0.18;
 }
 
 button,
@@ -141,6 +163,8 @@ body[data-theme="formal"] .ambient {
 }
 
 .hero-panel {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -149,6 +173,45 @@ body[data-theme="formal"] .ambient {
   margin-bottom: 18px;
   padding: 26px 30px;
   border-radius: var(--radius-xl);
+}
+
+body[data-theme="casual"] .hero-panel {
+  border-color: rgba(99, 221, 255, 0.22);
+  background:
+    linear-gradient(116deg, rgba(2, 7, 18, 0.96) 0%, rgba(4, 9, 26, 0.94) 48%, rgba(34, 8, 42, 0.88) 100%),
+    radial-gradient(circle at 78% 42%, rgba(255, 138, 24, 0.20), transparent 24rem);
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(100deg, transparent 0 34%, rgba(29, 204, 255, 0.12) 42%, transparent 50%),
+    repeating-linear-gradient(100deg, transparent 0 36px, rgba(125, 211, 252, 0.11) 38px 40px, transparent 43px 96px);
+  mask-image: linear-gradient(90deg, transparent, black 16%, black 72%, transparent);
+  opacity: 0.52;
+}
+
+.hero-panel::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: -88px;
+  width: 48%;
+  height: 170px;
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(255, 138, 24, 0.20), rgba(29, 204, 255, 0.08) 42%, transparent 68%);
+  filter: blur(10px);
+  transform: rotate(-6deg);
+}
+
+.hero-copy,
+.mode-switch {
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow,
@@ -190,6 +253,18 @@ h1 {
   text-wrap: balance;
 }
 
+body[data-theme="casual"] h1 {
+  max-width: 920px;
+  font-style: italic;
+  font-weight: 950;
+  background: linear-gradient(180deg, #ffffff 0%, #eaf6ff 42%, #9eb7d5 67%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 10px 28px rgba(255, 255, 255, 0.10), 0 0 34px rgba(29, 204, 255, 0.14);
+  transform: skewX(-5deg);
+}
+
 .lead {
   max-width: 780px;
   margin-bottom: 0;
@@ -198,6 +273,47 @@ h1 {
   line-height: 1.72;
   letter-spacing: 0.005em;
   text-wrap: pretty;
+}
+
+.race-badge {
+  display: inline-grid;
+  gap: 2px;
+  margin-top: 18px;
+  padding: 12px 18px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 54%, transparent);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(3, 12, 28, 0.82), rgba(5, 20, 42, 0.38)),
+    radial-gradient(circle at right, rgba(29, 204, 255, 0.14), transparent 12rem);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 26px rgba(29, 204, 255, 0.14);
+}
+
+.race-badge strong {
+  color: #f8fbff;
+  font-size: clamp(1.18rem, 1.8vw, 1.54rem);
+  font-weight: 950;
+  letter-spacing: -0.035em;
+}
+
+.race-badge span,
+.race-badge small {
+  color: var(--accent);
+  text-shadow: 0 0 16px color-mix(in srgb, var(--accent) 54%, transparent);
+}
+
+.race-badge small {
+  font-size: 0.86rem;
+  font-weight: 850;
+  letter-spacing: 0.02em;
+}
+
+body[data-theme="formal"] .race-badge {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+body[data-theme="formal"] .race-badge strong {
+  color: #111827;
 }
 
 .mode-switch {
@@ -227,12 +343,37 @@ h1 {
 }
 
 .dashboard {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(250px, 300px);
   gap: 18px;
   min-height: 610px;
   padding: 18px;
   border-radius: 32px;
+}
+
+body[data-theme="casual"] .dashboard {
+  background:
+    linear-gradient(140deg, rgba(2, 7, 18, 0.92), rgba(3, 9, 27, 0.74) 52%, rgba(23, 6, 31, 0.82)),
+    radial-gradient(circle at 64% 40%, rgba(29, 204, 255, 0.12), transparent 28rem);
+}
+
+.dashboard::before {
+  content: "";
+  position: absolute;
+  inset: -40% -22% auto 18%;
+  height: 74%;
+  pointer-events: none;
+  background: conic-gradient(from 262deg at 55% 62%, transparent 0 13deg, rgba(255, 138, 24, 0.22) 18deg 24deg, transparent 30deg 68deg, rgba(29, 204, 255, 0.20) 72deg 79deg, transparent 88deg 360deg);
+  filter: blur(3px);
+  opacity: 0.76;
+  transform: perspective(720px) rotateX(58deg) rotateZ(-5deg);
+}
+
+.dashboard > * {
+  position: relative;
+  z-index: 1;
 }
 
 .chart-card,
@@ -259,6 +400,16 @@ body[data-theme="casual"] .chart-card::before {
   transform: skewY(-4deg);
 }
 
+body[data-theme="casual"] .chart-card {
+  background:
+    linear-gradient(180deg, rgba(2, 8, 21, 0.96), rgba(2, 5, 15, 0.96)),
+    radial-gradient(circle at 68% 36%, rgba(255, 138, 24, 0.12), transparent 24rem);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 -80px 120px rgba(29, 204, 255, 0.05),
+    0 24px 70px rgba(0, 0, 0, 0.36);
+}
+
 .chart-card__header {
   position: relative;
   z-index: 2;
@@ -275,6 +426,11 @@ body[data-theme="casual"] .chart-card::before {
   font-size: clamp(2rem, 4vw, 3.2rem);
   line-height: 1;
   letter-spacing: -0.045em;
+}
+
+body[data-theme="casual"] .chart-card h2 {
+  color: #1dd7ff;
+  text-shadow: 0 0 18px rgba(29, 215, 255, 0.64), 0 0 42px rgba(29, 215, 255, 0.25);
 }
 
 .primary-actions {
@@ -335,6 +491,17 @@ body.is-playing #pauseButton {
   background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
 }
 
+body[data-theme="casual"] .chart-stage {
+  border-color: rgba(99, 221, 255, 0.30);
+  background:
+    linear-gradient(125deg, rgba(3, 10, 26, 0.84), rgba(5, 8, 22, 0.74)),
+    radial-gradient(ellipse at 60% 45%, rgba(255, 138, 24, 0.10), transparent 58%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 80px rgba(29, 204, 255, 0.08),
+    0 0 34px rgba(29, 204, 255, 0.09);
+}
+
 #chartCanvas {
   display: block;
   width: 100%;
@@ -353,6 +520,14 @@ body.is-playing #pauseButton {
   background: var(--panel-strong);
 }
 
+body[data-theme="casual"] .metric-card,
+body[data-theme="casual"] .source-link {
+  background:
+    linear-gradient(180deg, rgba(4, 10, 25, 0.96), rgba(2, 5, 15, 0.94)),
+    radial-gradient(circle at 72% 18%, rgba(29, 204, 255, 0.10), transparent 12rem);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 40px rgba(0, 0, 0, 0.26);
+}
+
 .metric-card {
   padding: 18px;
 }
@@ -365,6 +540,11 @@ body.is-playing #pauseButton {
   line-height: 1.05;
   font-weight: 800;
   letter-spacing: -0.02em;
+}
+
+body[data-theme="casual"] .metric-card strong,
+body[data-theme="casual"] .metric-card b {
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 58%, transparent);
 }
 
 .metric-card b {
@@ -493,6 +673,46 @@ body.is-playing #pauseButton {
 input[type="range"] {
   width: 100%;
   accent-color: var(--accent);
+}
+
+input[type="range"] {
+  appearance: none;
+  height: 22px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 58%, var(--accent-2)), var(--accent-2));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -5px;
+  border: 0;
+  border-radius: 50%;
+  background: #1dd7ff;
+  box-shadow: 0 0 0 5px rgba(29, 215, 255, 0.16), 0 0 24px rgba(29, 215, 255, 0.8);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 58%, var(--accent-2)), var(--accent-2));
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: #1dd7ff;
+  box-shadow: 0 0 0 5px rgba(29, 215, 255, 0.16), 0 0 24px rgba(29, 215, 255, 0.8);
 }
 
 .control-grid {

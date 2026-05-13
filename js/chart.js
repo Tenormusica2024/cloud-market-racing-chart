@@ -326,38 +326,44 @@
   function drawCanvasBackground(width, height, isCasual) {
     if (isCasual) {
       const bg = ctx.createLinearGradient(0, 0, width, height);
-      bg.addColorStop(0, '#071024');
-      bg.addColorStop(0.5, '#070a16');
-      bg.addColorStop(1, '#15071f');
+      bg.addColorStop(0, '#020714');
+      bg.addColorStop(0.42, '#031126');
+      bg.addColorStop(0.72, '#070918');
+      bg.addColorStop(1, '#16071b');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
 
       ctx.save();
-      ctx.globalAlpha = 0.18;
+      ctx.globalAlpha = 0.22;
       ctx.strokeStyle = '#1dd7ff';
       ctx.lineWidth = 1;
-      for (let x = 0; x <= width; x += 54) {
+      for (let x = -90; x <= width + 120; x += 56) {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x - 80, height);
+        ctx.moveTo(x + width * 0.11, 0);
+        ctx.lineTo(x - width * 0.18, height);
         ctx.stroke();
       }
-      for (let y = 0; y <= height; y += 48) {
+      for (let i = 0; i < 9; i++) {
+        const t = i / 8;
+        const y = 54 + Math.pow(t, 1.55) * (height - 74);
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(width, y + 20);
+        ctx.lineTo(width, y + 24 + t * 18);
         ctx.stroke();
       }
       ctx.restore();
 
       ctx.save();
-      const track = ctx.createRadialGradient(width * 0.5, height * 0.62, 20, width * 0.5, height * 0.62, width * 0.62);
-      track.addColorStop(0, 'rgba(24, 200, 255, 0.22)');
-      track.addColorStop(0.48, 'rgba(24, 200, 255, 0.08)');
+      const track = ctx.createRadialGradient(width * 0.58, height * 0.62, 20, width * 0.58, height * 0.62, width * 0.72);
+      track.addColorStop(0, 'rgba(24, 200, 255, 0.24)');
+      track.addColorStop(0.38, 'rgba(255, 138, 24, 0.10)');
+      track.addColorStop(0.56, 'rgba(24, 200, 255, 0.08)');
       track.addColorStop(1, 'rgba(24, 200, 255, 0)');
       ctx.fillStyle = track;
       ctx.fillRect(0, 0, width, height);
       ctx.restore();
+
+      drawCinematicTrack(width, height);
     } else {
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, width, height);
@@ -369,13 +375,64 @@
     }
   }
 
+  function drawCinematicTrack(width, height) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(width * 0.53, height * 0.55);
+    ctx.rotate(-0.08);
+    ctx.scale(1, 0.36);
+
+    const rings = [
+      { radius: width * 0.58, color: 'rgba(29, 204, 255, 0.24)', blur: 20, width: 5 },
+      { radius: width * 0.46, color: 'rgba(255, 138, 24, 0.24)', blur: 22, width: 5 },
+      { radius: width * 0.35, color: 'rgba(29, 204, 255, 0.16)', blur: 14, width: 2 },
+    ];
+
+    rings.forEach((ring, index) => {
+      ctx.shadowColor = ring.color;
+      ctx.shadowBlur = ring.blur;
+      ctx.strokeStyle = ring.color;
+      ctx.lineWidth = ring.width;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ring.radius, ring.radius * (0.54 + index * 0.02), 0, Math.PI * 0.08, Math.PI * 1.18);
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    ctx.save();
+    if (width < 620) {
+      ctx.restore();
+      return;
+    }
+
+    ctx.fillStyle = 'rgba(211, 228, 255, 0.58)';
+    ctx.shadowColor = 'rgba(29, 204, 255, 0.56)';
+    ctx.shadowBlur = 10;
+    ctx.font = '800 13px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    const labels = ['2018', '2020', '2022', '2024'];
+    labels.forEach((label, index) => {
+      const x = width * (0.32 + index * 0.16);
+      const y = 34 + index * 6;
+      ctx.fillText(label, x, y);
+      ctx.beginPath();
+      ctx.moveTo(x, y + 8);
+      ctx.lineTo(x, y + 42);
+      ctx.strokeStyle = 'rgba(125, 211, 252, 0.22)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
   function drawAxis(layout, isCasual) {
     const { left, top, chartWidth, height } = layout;
     ctx.save();
     ctx.font = '600 13px Inter, system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    for (let value = 0; value <= maxShare; value += 10) {
+    const ticks = chartWidth < 170 ? [0, 50] : chartWidth < 360 ? [0, 25, 50] : [0, 10, 20, 30, 40, 50];
+    ticks.forEach((value) => {
       const x = left + (value / maxShare) * chartWidth;
       ctx.strokeStyle = isCasual ? 'rgba(103, 232, 249, 0.18)' : 'rgba(15, 23, 42, 0.11)';
       ctx.setLineDash([3, 5]);
@@ -386,7 +443,7 @@
       ctx.setLineDash([]);
       ctx.fillStyle = isCasual ? '#8af6ff' : '#334155';
       ctx.fillText(`${value}%`, x, top - 38);
-    }
+    });
     ctx.restore();
   }
 
@@ -445,19 +502,26 @@
     ctx.save();
 
     if (isCasual) {
+      drawEnergyColumns(x, y, width, height, color);
+      ctx.globalCompositeOperation = 'lighter';
       ctx.shadowColor = color;
-      ctx.shadowBlur = 24;
-      ctx.globalAlpha = 0.32;
+      ctx.shadowBlur = 30;
+      ctx.globalAlpha = 0.28;
       ctx.fillStyle = color;
-      roundRect(ctx, x - 4, y + height * 0.2, width + 10, height * 0.6, radius);
+      roundRect(ctx, x - 16, y + height * 0.22, width + 54, height * 0.56, radius);
+      ctx.fill();
+      ctx.globalAlpha = 0.16;
+      roundRect(ctx, x - 34, y + height * 0.36, width + 90, height * 0.28, radius);
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.shadowBlur = 18;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.shadowBlur = 22;
     }
 
     const gradient = ctx.createLinearGradient(x, y, x + width, y);
-    gradient.addColorStop(0, color);
-    gradient.addColorStop(0.62, colorMix(color, '#ffffff', isCasual ? 0.14 : 0.05));
+    gradient.addColorStop(0, isCasual ? colorMix(color, '#04101f', 0.18) : color);
+    gradient.addColorStop(0.34, color);
+    gradient.addColorStop(0.72, colorMix(color, '#ffffff', isCasual ? 0.24 : 0.05));
     gradient.addColorStop(1, isCasual ? '#ffffff' : colorMix(color, '#111827', 0.05));
     ctx.fillStyle = gradient;
     roundRect(ctx, x, y, width, height, radius);
@@ -469,9 +533,41 @@
       ctx.lineWidth = 1.5;
       roundRect(ctx, x + 2, y + 2, Math.max(4, width - 4), height - 4, radius);
       ctx.stroke();
-      drawRacer(x + width - 16, y + height / 2, color);
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = 'rgba(255,255,255,0.72)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x + 24, y + height * 0.22);
+      ctx.lineTo(x + width - 18, y + height * 0.22);
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+      drawRacer(x + width - 8, y + height / 2, color);
     }
 
+    ctx.restore();
+  }
+
+  function drawEnergyColumns(x, y, width, height, color) {
+    const count = Math.max(3, Math.min(18, Math.floor(width / 30)));
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < count; i++) {
+      const t = count === 1 ? 1 : i / (count - 1);
+      const columnHeight = height * (0.55 + t * 1.08);
+      const columnWidth = Math.max(4, Math.min(12, width / 36));
+      const cx = x + width * (0.18 + t * 0.80);
+      const cy = y + height * 0.50 - columnHeight * 0.18;
+      const gradient = ctx.createLinearGradient(cx, cy - columnHeight, cx, cy + columnHeight);
+      gradient.addColorStop(0, 'rgba(255,255,255,0)');
+      gradient.addColorStop(0.48, colorMix(color, '#ffffff', 0.2));
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.globalAlpha = 0.10 + t * 0.12;
+      ctx.fillStyle = gradient;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 12;
+      roundRect(ctx, cx, cy - columnHeight * 0.42, columnWidth, columnHeight, columnWidth / 2);
+      ctx.fill();
+    }
     ctx.restore();
   }
 
@@ -479,17 +575,27 @@
     ctx.save();
     ctx.translate(x, y);
     ctx.shadowColor = color;
-    ctx.shadowBlur = 16;
-    ctx.fillStyle = '#050815';
-    roundRect(ctx, -24, -12, 42, 24, 12);
+    ctx.shadowBlur = 22;
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = colorMix(color, '#ffffff', 0.24);
+    ctx.beginPath();
+    ctx.moveTo(26, 0);
+    ctx.lineTo(-16, -17);
+    ctx.lineTo(-7, 0);
+    ctx.lineTo(-16, 17);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#04101f';
+    roundRect(ctx, -28, -11, 32, 22, 11);
     ctx.fill();
     ctx.fillStyle = color;
-    roundRect(ctx, -16, -6, 22, 12, 6);
+    roundRect(ctx, -20, -5, 18, 10, 5);
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(-12, 13, 4, 0, Math.PI * 2);
-    ctx.arc(10, 13, 4, 0, Math.PI * 2);
+    ctx.arc(-21, 12, 3.5, 0, Math.PI * 2);
+    ctx.arc(-2, 12, 3.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
