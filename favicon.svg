@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Cloud Market Racing Chart favicon">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#031126"/>
+      <stop offset="0.52" stop-color="#050816"/>
+      <stop offset="1" stop-color="#180719"/>
+    </linearGradient>
+    <linearGradient id="barCyan" x1="13" y1="25" x2="53" y2="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1297ff"/>
+      <stop offset="0.68" stop-color="#22d3ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="barOrange" x1="15" y1="36" x2="49" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff8a18"/>
+      <stop offset="0.82" stop-color="#ffb45e"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-60%" width="180%" height="220%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="3" y="3" width="58" height="58" rx="15" fill="url(#bg)"/>
+  <path d="M11 52C22 36 41 52 54 23" fill="none" stroke="#1dccff" stroke-opacity=".25" stroke-width="2"/>
+  <path d="M9 44C23 51 41 48 55 38" fill="none" stroke="#ff8a18" stroke-opacity=".24" stroke-width="2"/>
+  <g opacity=".23" stroke="#1dccff" stroke-width="1">
+    <path d="M17 5 6 58"/><path d="M33 5 22 58"/><path d="M49 5 38 58"/>
+    <path d="M9 20h46"/><path d="M8 36h48"/><path d="M10 49h42"/>
+  </g>
+  <g filter="url(#glow)">
+    <rect x="13" y="20" width="38" height="10" rx="5" fill="url(#barCyan)"/>
+    <path d="M50 19l8 6-8 6z" fill="#22d3ff"/>
+    <rect x="16" y="33" width="30" height="8" rx="4" fill="url(#barOrange)"/>
+    <path d="M45 32l7 5-7 5z" fill="#ff8a18"/>
+    <rect x="19" y="45" width="20" height="7" rx="3.5" fill="#17d6ce"/>
+    <path d="M38 44l6 4.5-6 4.5z" fill="#17d6ce"/>
+  </g>
+  <circle cx="18" cy="25" r="3" fill="#031126" stroke="#ffffff" stroke-width="1.4"/>
+  <circle cx="19" cy="37" r="2.6" fill="#031126" stroke="#ffffff" stroke-width="1.2"/>
+</svg>
