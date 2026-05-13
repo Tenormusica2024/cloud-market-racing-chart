@@ -1,59 +1,37 @@
-# Cloud Market Share Racing Chart
+# Cloud Market Racing Chart v2
 
-🚀 **Interactive Racing Bar Chart** showing cloud service market share evolution from 2019-2025
+AWS / Azure / Google Cloud のクラウド市場シェア推移を、軽量な Canvas 2D レンダリングで操作できるレーシングチャートです。
 
-## ✨ Features
+## 更新方針
 
-- **120 FPS Ultra Smooth Animation** (optimized to 60 FPS)
-- **Real-time Data Visualization** with 2025 market data
-- **Interactive Timeline Control** - Jump to any date
-- **Variable Speed Control** - 0.01s to 3.00s intervals
-- **Professional Dark Theme** with glassmorphism design
-- **Responsive Design** - Works on all devices
-- **Keyboard Shortcuts** - Space, R, Arrow keys
+この版では、古い DOM 更新中心の実装をやめ、UI イメージに忠実な 2026 年風のデザインへ寄せました。
 
-## 🎮 Controls
+- Formal / Casual の表示モード切替
+- Canvas 2D によるチャート描画
+- Play / Pause / Reset
+- Timeline scrubber
+- Speed: 0.5x / 1x / 1.5x / 2x
+- Reduced motion toggle
+- 非表示タブでの自動停止
+- 現在値のアクセシブルなテーブル表示
 
-- **Play/Pause**: Click buttons or press `Space`
-- **Reset**: Click reset or press `R`
-- **Timeline**: Drag the purple slider
-- **Speed**: Adjust with the blue slider
-- **Navigate**: Use `←` `→` arrow keys
+## Performance policy
 
-## 🎨 Design
+- チャート本体は SVG DOM ではなく Canvas 2D で描画
+- `requestAnimationFrame` に描画を集約
+- 再生中に大きな DOM ツリーを毎フレーム更新しない
+- devicePixelRatio は最大 2 に制限
+- ResizeObserver の結果は rAF にまとめる
+- Reduced motion と visibility pause を実装
 
-- **Dark Elegant Theme** with professional gradients
-- **Fixed Position Numbers** - No flickering text
-- **Smooth Transitions** - CSS-optimized animations
-- **Glassmorphism Effects** - Modern UI design
+## Local preview
 
-## 📊 Data
+```powershell
+python -m http.server 8099 --bind 127.0.0.1
+```
 
-- **Period**: 2019/01/01 - 2025/04/30
-- **Companies**: AWS, Azure, Google Cloud, Alibaba Cloud, IBM, Oracle
-- **Data Points**: 500+ monthly data points
-- **Sources**: Industry reports and market analysis
+Then open:
 
-## 🛠 Technologies
-
-- **HTML5** with embedded CSS/JavaScript
-- **60 FPS** frame-based animation
-- **CSS Grid & Flexbox** for responsive layout
-- **Backdrop-filter** for glassmorphism effects
-- **Canvas-free** pure DOM manipulation
-
-## 🚀 Live Demo
-
-Visit: [https://yourusername.github.io/cloud-market-racing-chart/](https://yourusername.github.io/cloud-market-racing-chart/)
-
-## 🔧 Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/cloud-market-racing-chart.git
-
-# Navigate to project
-cd cloud-market-racing-chart
-
-# Open in browser
-open index.html
+```text
+http://127.0.0.1:8099/
+```
