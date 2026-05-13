@@ -35,27 +35,42 @@
     </header>
 
     <section class="dashboard" aria-label="Cloud market racing chart dashboard">
-      <section class="chart-card" aria-labelledby="chart-title">
-        <div class="chart-card__header">
-          <div>
-            <p class="panel-label">Market Share Race</p>
-            <h2 id="chart-title"><span id="dateLabel">2026 Q1</span></h2>
+      <div class="dashboard-main">
+        <section class="chart-card" aria-labelledby="chart-title">
+          <div class="chart-card__header">
+            <div>
+              <p class="panel-label">Market Share Race</p>
+              <h2 id="chart-title"><span id="dateLabel">2026 Q1</span></h2>
+            </div>
+            <div class="primary-actions" aria-label="Playback controls">
+              <button class="action-button action-button--primary" id="playButton" type="button" aria-pressed="false">
+                <span aria-hidden="true">▶</span> Play
+              </button>
+              <button class="action-button" id="pauseButton" type="button">
+                <span aria-hidden="true">Ⅱ</span> Pause
+              </button>
+              <button class="icon-button" id="resetButton" type="button" aria-label="Reset to 2018 Q4">↺</button>
+            </div>
           </div>
-          <div class="primary-actions" aria-label="Playback controls">
-            <button class="action-button action-button--primary" id="playButton" type="button" aria-pressed="false">
-              <span aria-hidden="true">▶</span> Play
-            </button>
-            <button class="action-button" id="pauseButton" type="button">
-              <span aria-hidden="true">Ⅱ</span> Pause
-            </button>
-            <button class="icon-button" id="resetButton" type="button" aria-label="Reset to 2018 Q4">↺</button>
-          </div>
-        </div>
 
-        <div class="chart-stage">
-          <canvas id="chartCanvas" aria-label="Top cloud providers market share racing bar chart"></canvas>
-        </div>
-      </section>
+          <div class="chart-stage">
+            <canvas id="chartCanvas" aria-label="Top cloud providers market share racing bar chart"></canvas>
+          </div>
+        </section>
+
+        <section class="context-strip" aria-label="Secondary market context">
+          <article class="metric-card metric-card--neocloud">
+            <span>AI Neoclouds</span>
+            <strong id="neocloudValue">5.0%</strong>
+            <small id="neocloudCaption">AI-focused challengers are about 5% of the total cloud market.</small>
+          </article>
+
+          <article class="metric-card metric-card--changes">
+            <span id="changeTitle">Change vs 2025 Q4</span>
+            <dl id="changeList"></dl>
+          </article>
+        </section>
+      </div>
 
       <aside class="insight-rail" aria-label="Insights">
         <article class="metric-card metric-card--sparkline">
@@ -90,17 +105,6 @@
           <strong id="trackedShareValue">Top 5 71.0%</strong>
           <div class="donut" id="shareDonut" aria-hidden="true"></div>
           <small id="donutCaption">AWS 28.0 / Azure 21.0 / GCP 14.0 / Oracle 4.0 / Alibaba 4.0</small>
-        </article>
-
-        <article class="metric-card metric-card--neocloud">
-          <span>AI Neoclouds</span>
-          <strong id="neocloudValue">5.0%</strong>
-          <small id="neocloudCaption">AI-focused challengers are about 5% of the total cloud market.</small>
-        </article>
-
-        <article class="metric-card metric-card--changes">
-          <span id="changeTitle">Change vs 2025 Q4</span>
-          <dl id="changeList"></dl>
         </article>
 
         <a class="source-link" href="https://www.crnasia.com/news-network/2026/cloud-market-share-q1-2026-aws-microsoft-google-battling-in-ai-era" target="_blank" rel="noopener noreferrer">
