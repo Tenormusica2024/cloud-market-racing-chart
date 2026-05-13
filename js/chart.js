@@ -7,16 +7,19 @@
     { key: 'Google Cloud', label: 'Google\nCloud', color: '#0aa39e', casual: '#17d6ce' },
   ];
 
-  // Q4 market share reference points. Intermediate quarters are interpolated
+  // Public market share reference points. Intermediate quarters are interpolated
   // for demo playback instead of being presented as independently sourced data.
   const anchors = [
-    { year: 2018, values: { AWS: 33.4, Azure: 14.5, 'Google Cloud': 4.9 } },
-    { year: 2019, values: { AWS: 32.4, Azure: 17.6, 'Google Cloud': 6.0 } },
-    { year: 2020, values: { AWS: 31.0, Azure: 20.0, 'Google Cloud': 7.0 } },
-    { year: 2021, values: { AWS: 33.0, Azure: 22.0, 'Google Cloud': 9.0 } },
-    { year: 2022, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
-    { year: 2023, values: { AWS: 31.0, Azure: 26.0, 'Google Cloud': 10.0 } },
-    { year: 2024, values: { AWS: 33.0, Azure: 20.0, 'Google Cloud': 11.0 } },
+    { year: 2018, quarter: 4, values: { AWS: 33.4, Azure: 14.5, 'Google Cloud': 4.9 } },
+    { year: 2019, quarter: 4, values: { AWS: 32.4, Azure: 17.6, 'Google Cloud': 6.0 } },
+    { year: 2020, quarter: 4, values: { AWS: 31.0, Azure: 20.0, 'Google Cloud': 7.0 } },
+    { year: 2021, quarter: 4, values: { AWS: 33.0, Azure: 22.0, 'Google Cloud': 9.0 } },
+    { year: 2022, quarter: 4, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
+    { year: 2023, quarter: 4, values: { AWS: 31.0, Azure: 26.0, 'Google Cloud': 10.0 } },
+    { year: 2024, quarter: 4, values: { AWS: 33.0, Azure: 20.0, 'Google Cloud': 11.0 } },
+    { year: 2025, quarter: 1, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
+    { year: 2025, quarter: 4, values: { AWS: 32.0, Azure: 22.0, 'Google Cloud': 12.0 } },
+    { year: 2026, quarter: 1, values: { AWS: 28.0, Azure: 21.0, 'Google Cloud': 14.0 } },
   ];
 
   const data = buildQuarterData();
@@ -57,6 +60,7 @@
   const trackedShareValue = document.getElementById('trackedShareValue');
   const shareDonut = document.getElementById('shareDonut');
   const donutCaption = document.getElementById('donutCaption');
+  const changeTitle = document.getElementById('changeTitle');
   const changeList = document.getElementById('changeList');
   const dataTable = document.getElementById('dataTable');
   const frameBudget = document.getElementById('frameBudget');
@@ -178,10 +182,12 @@
     for (let yearIndex = 0; yearIndex < anchors.length - 1; yearIndex++) {
       const current = anchors[yearIndex];
       const next = anchors[yearIndex + 1];
-      for (let step = 0; step < 4; step++) {
-        const localT = step / 4;
-        const year = step === 0 ? current.year : current.year + 1;
-        const quarter = step === 0 ? 4 : step;
+      const currentQuarterIndex = toQuarterIndex(current);
+      const nextQuarterIndex = toQuarterIndex(next);
+      const span = Math.max(1, nextQuarterIndex - currentQuarterIndex);
+      for (let quarterIndex = currentQuarterIndex; quarterIndex < nextQuarterIndex; quarterIndex++) {
+        const localT = (quarterIndex - currentQuarterIndex) / span;
+        const { year, quarter } = fromQuarterIndex(quarterIndex);
         const values = {};
         providers.forEach((provider) => {
           const start = current.values[provider.key];
@@ -198,12 +204,23 @@
     }
     const last = anchors[anchors.length - 1];
     rows.push({
-      label: `${last.year} Q4`,
+      label: `${last.year} Q${last.quarter}`,
       year: last.year,
-      quarter: 4,
+      quarter: last.quarter,
       values: { ...last.values },
     });
     return rows;
+  }
+
+  function toQuarterIndex(point) {
+    return point.year * 4 + point.quarter - 1;
+  }
+
+  function fromQuarterIndex(index) {
+    return {
+      year: Math.floor(index / 4),
+      quarter: index % 4 + 1,
+    };
   }
 
   function buildSparkModel(rows) {
@@ -410,9 +427,9 @@
     ctx.shadowBlur = 10;
     ctx.font = '800 13px Inter, system-ui, sans-serif';
     ctx.textAlign = 'center';
-    const labels = ['2018', '2020', '2022', '2024'];
+    const labels = ['2018', '2020', '2022', '2024', '2026'];
     labels.forEach((label, index) => {
-      const x = width * (0.32 + index * 0.16);
+      const x = width * (0.28 + index * 0.135);
       const y = 34 + index * 6;
       ctx.fillText(label, x, y);
       ctx.beginPath();
@@ -649,13 +666,14 @@
     state.lastSyncedIndex = index;
 
     const snapshot = getInterpolatedSnapshot(index);
-    const previous = data.find((row) => row.label === '2023 Q4') || data[data.length - 5];
+    const previous = data[Math.max(0, index - 1)];
     const leader = snapshot.rows[0];
 
     dateLabel.textContent = snapshot.label;
     timeline.value = String(state.virtualIndex);
     leaderName.textContent = leader.key;
     leaderValue.textContent = `${leader.value.toFixed(1)}%`;
+    changeTitle.textContent = index === 0 ? 'Change vs start' : `Change vs ${previous.label}`;
 
     changeList.innerHTML = snapshot.rows.map((row) => {
       const change = row.value - previous.values[row.key];
