@@ -27,7 +27,7 @@
   const data = buildQuarterData();
 
   const state = {
-    theme: localStorage.getItem('cloud-racing-theme') || 'casual',
+    theme: 'casual',
     virtualIndex: data.length - 1,
     playing: false,
     speed: 5,
@@ -106,7 +106,6 @@
     modeButtons.forEach((button) => {
       button.addEventListener('click', () => {
         state.theme = button.dataset.themeTarget;
-        localStorage.setItem('cloud-racing-theme', state.theme);
         document.body.dataset.theme = state.theme;
         syncModeButtons();
         requestRender();
