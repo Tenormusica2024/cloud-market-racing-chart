@@ -7,22 +7,23 @@
     { key: 'Google Cloud', label: 'Google\nCloud', color: '#0aa39e', casual: '#17d6ce' },
   ];
 
+  // Q4 market share reference points. Intermediate quarters are interpolated
+  // for demo playback instead of being presented as independently sourced data.
   const anchors = [
-    { year: 2015, values: { AWS: 29.5, Azure: 9.8, 'Google Cloud': 4.1 } },
-    { year: 2016, values: { AWS: 31.0, Azure: 11.6, 'Google Cloud': 5.0 } },
-    { year: 2017, values: { AWS: 32.2, Azure: 13.8, 'Google Cloud': 6.0 } },
-    { year: 2018, values: { AWS: 32.7, Azure: 15.8, 'Google Cloud': 7.0 } },
-    { year: 2019, values: { AWS: 33.1, Azure: 17.5, 'Google Cloud': 7.8 } },
-    { year: 2020, values: { AWS: 32.6, Azure: 19.4, 'Google Cloud': 8.6 } },
-    { year: 2021, values: { AWS: 32.2, Azure: 21.0, 'Google Cloud': 9.2 } },
-    { year: 2022, values: { AWS: 32.1, Azure: 22.0, 'Google Cloud': 9.8 } },
-    { year: 2023, values: { AWS: 32.0, Azure: 21.5, 'Google Cloud': 9.8 } },
-    { year: 2024, values: { AWS: 33.6, Azure: 22.7, 'Google Cloud': 10.4 } },
+    { year: 2018, values: { AWS: 33.4, Azure: 14.5, 'Google Cloud': 4.9 } },
+    { year: 2019, values: { AWS: 32.4, Azure: 17.6, 'Google Cloud': 6.0 } },
+    { year: 2020, values: { AWS: 31.0, Azure: 20.0, 'Google Cloud': 7.0 } },
+    { year: 2021, values: { AWS: 33.0, Azure: 22.0, 'Google Cloud': 9.0 } },
+    { year: 2022, values: { AWS: 32.0, Azure: 23.0, 'Google Cloud': 10.0 } },
+    { year: 2023, values: { AWS: 31.0, Azure: 26.0, 'Google Cloud': 10.0 } },
+    { year: 2024, values: { AWS: 33.0, Azure: 20.0, 'Google Cloud': 11.0 } },
   ];
+
+  const data = buildQuarterData();
 
   const state = {
     theme: localStorage.getItem('cloud-racing-theme') || 'casual',
-    virtualIndex: 39,
+    virtualIndex: data.length - 1,
     playing: false,
     speed: 5,
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -35,7 +36,6 @@
     dpr: 1,
   };
 
-  const data = buildQuarterData();
   const sparkModel = buildSparkModel(data);
   const maxShare = 50;
   const stepMs = () => Math.max(45, 900 / state.speed);
@@ -175,11 +175,13 @@
 
   function buildQuarterData() {
     const rows = [];
-    for (let yearIndex = 0; yearIndex < anchors.length; yearIndex++) {
+    for (let yearIndex = 0; yearIndex < anchors.length - 1; yearIndex++) {
       const current = anchors[yearIndex];
-      const next = anchors[yearIndex + 1] || current;
-      for (let quarter = 1; quarter <= 4; quarter++) {
-        const localT = (quarter - 1) / 4;
+      const next = anchors[yearIndex + 1];
+      for (let step = 0; step < 4; step++) {
+        const localT = step / 4;
+        const year = step === 0 ? current.year : current.year + 1;
+        const quarter = step === 0 ? 4 : step;
         const values = {};
         providers.forEach((provider) => {
           const start = current.values[provider.key];
@@ -187,13 +189,20 @@
           values[provider.key] = round1(start + (end - start) * localT);
         });
         rows.push({
-          label: `${current.year} Q${quarter}`,
-          year: current.year,
+          label: `${year} Q${quarter}`,
+          year,
           quarter,
           values,
         });
       }
     }
+    const last = anchors[anchors.length - 1];
+    rows.push({
+      label: `${last.year} Q4`,
+      year: last.year,
+      quarter: 4,
+      values: { ...last.values },
+    });
     return rows;
   }
 
@@ -509,9 +518,11 @@
     const awsColor = isCasual ? providers[0].casual : providers[0].color;
     const azureColor = isCasual ? providers[1].casual : providers[1].color;
     const googleColor = isCasual ? providers[2].casual : providers[2].color;
-    const otherColor = isCasual ? 'rgba(145, 166, 196, 0.26)' : 'rgba(100, 116, 139, 0.22)';
-    const azureEnd = aws + azure;
-    const googleEnd = trackedShare;
+    const safeTrackedShare = Math.max(0.1, trackedShare);
+    const awsMix = (aws / safeTrackedShare) * 100;
+    const azureMix = (azure / safeTrackedShare) * 100;
+    const googleMix = Math.max(0, 100 - awsMix - azureMix);
+    const azureEnd = awsMix + azureMix;
 
     leaderName.textContent = leader.key;
     leaderValue.textContent = `${leader.value.toFixed(1)}%`;
@@ -521,9 +532,9 @@
     sparkProgress.setAttribute('d', toPath(progressPoints));
     sparkMarker.setAttribute('cx', spark.x.toFixed(1));
     sparkMarker.setAttribute('cy', spark.y.toFixed(1));
-    trackedShareValue.textContent = `${trackedShare.toFixed(1)}%`;
-    donutCaption.textContent = `AWS ${aws.toFixed(1)} / Azure ${azure.toFixed(1)} / GCP ${google.toFixed(1)}`;
-    shareDonut.style.background = `conic-gradient(${awsColor} 0 ${aws}%, ${azureColor} ${aws}% ${azureEnd}%, ${googleColor} ${azureEnd}% ${googleEnd}%, ${otherColor} ${googleEnd}% 100%)`;
+    trackedShareValue.textContent = `Top 3 ${trackedShare.toFixed(1)}%`;
+    donutCaption.textContent = `Market share AWS ${aws.toFixed(1)} / Azure ${azure.toFixed(1)} / GCP ${google.toFixed(1)}`;
+    shareDonut.style.background = `conic-gradient(${awsColor} 0 ${awsMix}%, ${azureColor} ${awsMix}% ${azureEnd}%, ${googleColor} ${azureEnd}% ${azureEnd + googleMix}%)`;
   }
 
   function syncDom(force) {
